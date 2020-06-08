@@ -1,14 +1,14 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Seo\Models;
+namespace OZiTAG\Tager\Backend\Mail\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ozerich\FileStorage\Models\File;
 
-class TagerEmailLog extends Model
+class TagerMailLog extends Model
 {
-    protected $table = 'tager_email_logs';
+    protected $table = 'tager_mail_logs';
 
     /**
      * The attributes that are mass assignable.

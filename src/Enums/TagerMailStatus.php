@@ -1,10 +1,10 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Enums;
+namespace OZiTAG\Tager\Backend\Mail\Enum;
 
 use OZiTAG\Tager\Backend\Core\Enum;
 
-final class TagerEmailStatus extends Enum
+final class TagerMailStatus extends Enum
 {
     const Created = 'CREATED';
     const Sending = 'SENDING';

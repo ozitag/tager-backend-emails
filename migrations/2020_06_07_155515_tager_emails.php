@@ -13,7 +13,7 @@ class TagerEmails extends Migration
      */
     public function up()
     {
-        Schema::create('tager_email_templates', function (Blueprint $table) {
+        Schema::create('tager_mail_templates', function (Blueprint $table) {
             $table->id();
             $table->string('template_id');
             $table->string('name');
@@ -23,7 +23,7 @@ class TagerEmails extends Migration
             $table->timestamps();
         });
 
-        Schema::create('tager_email_logs', function (Blueprint $table) {
+        Schema::create('tager_mail_logs', function (Blueprint $table) {
             $table->id();
             $table->string('template')->nullable();
             $table->string('email');
@@ -42,7 +42,7 @@ class TagerEmails extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tager_email_templates');
-        Schema::dropIfExists('tager_email_logs');
+        Schema::dropIfExists('tager_mail_templates');
+        Schema::dropIfExists('tager_mail_logs');
     }
 }

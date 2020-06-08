@@ -4,7 +4,7 @@ namespace OZiTAG\Tager\Backend\Seo;
 
 use Illuminate\Support\ServiceProvider;
 
-class TagerBackendEmailsServiceProvider extends ServiceProvider
+class TagerBackendMailServiceProvider extends ServiceProvider
 {
 
     /**
@@ -29,7 +29,7 @@ class TagerBackendEmailsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->publishes([
-            __DIR__ . '/../config.php' => config_path('tager-emails.php'),
+            __DIR__ . '/../config.php' => config_path('tager-mail.php'),
         ]);
     }
 }

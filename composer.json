@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "OZiTAG\\Tager\\Backend\\Emails\\": "src"
+      "OZiTAG\\Tager\\Backend\\Mail\\": "src"
     }
   }
 }

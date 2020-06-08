@@ -4,9 +4,9 @@ namespace OZiTAG\Tager\Backend\Seo\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TagerEmailTemplate extends Model
+class TagerMailTemplate extends Model
 {
-    protected $table = 'tager_email_templates';
+    protected $table = 'tager_mail_templates';
 
     /**
      * The attributes that are mass assignable.
