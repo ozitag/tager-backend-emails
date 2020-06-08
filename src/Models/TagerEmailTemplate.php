@@ -3,8 +3,6 @@
 namespace OZiTAG\Tager\Backend\Seo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Ozerich\FileStorage\Models\File;
 
 class TagerEmailTemplate extends Model
 {
@@ -16,6 +14,9 @@ class TagerEmailTemplate extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'value', 'subject', 'recipients'
+        'name',
+        'value',
+        'subject',
+        'recipients'
     ];
 }

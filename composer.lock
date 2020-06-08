@@ -1288,12 +1288,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ozitag/tager-backend-core.git",
-                "reference": "130ac6ba8963fb6d6a44da5fbe704ba27ae815af"
+                "reference": "fc33d9b4a0e705baf3453d061d1541985a0a62b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ozitag/tager-backend-core/zipball/130ac6ba8963fb6d6a44da5fbe704ba27ae815af",
-                "reference": "130ac6ba8963fb6d6a44da5fbe704ba27ae815af",
+                "url": "https://api.github.com/repos/ozitag/tager-backend-core/zipball/fc33d9b4a0e705baf3453d061d1541985a0a62b2",
+                "reference": "fc33d9b4a0e705baf3453d061d1541985a0a62b2",
                 "shasum": "",
                 "mirrors": [
                     {

@@ -20,6 +20,7 @@ class TagerEmails extends Migration
             $table->string('value');
             $table->string('subject');
             $table->string('recipients');
+            $table->timestamps();
         });
 
         Schema::create('tager_email_logs', function (Blueprint $table) {
