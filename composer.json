@@ -1,8 +1,8 @@
 {
-  "name": "ozitag/tager-backend-seo",
-  "description": "SEO Settings",
+  "name": "ozitag/tager-backend-mail",
+  "description": "E-Mail Helper",
   "license": "MIT",
-  "homepage": "https://github.com/ozitag/tager-backend-core",
+  "homepage": "https://github.com/ozitag/tager-backend-mail",
   "authors": [
     {
       "name": "Vital Ozierski <v.ozierski@ozitag.com>",
