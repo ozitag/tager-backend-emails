@@ -1,12 +1,11 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Seo;
+namespace OZiTAG\Tager\Backend\Mail;
 
 use Illuminate\Support\ServiceProvider;
 
 class TagerBackendMailServiceProvider extends ServiceProvider
 {
-
     /**
      * Register any application services.
      *
@@ -14,7 +13,9 @@ class TagerBackendMailServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('tager-mail', function () {
+            return new TagerMail();
+        });
     }
 
     /**

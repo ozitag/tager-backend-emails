@@ -1,6 +1,6 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Seo\Models;
+namespace OZiTAG\Tager\Backend\Mail\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

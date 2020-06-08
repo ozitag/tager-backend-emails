@@ -1,6 +1,6 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Seo;
+namespace OZiTAG\Tager\Backend\Mail;
 
 class TagerMail
 {
@@ -9,7 +9,7 @@ class TagerMail
 
     }
 
-    public function sendEmailUsingTemplate($to, $template, $params = [])
+    public function sendEmailUsingTemplate($template, $params = [], $to = null)
     {
 
     }
