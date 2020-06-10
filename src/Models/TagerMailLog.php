@@ -16,7 +16,7 @@ class TagerMailLog extends Model
      * @var array
      */
     protected $fillable = [
-        'template',
+        'template_id',
         'email',
         'subject',
         'body',
@@ -24,4 +24,9 @@ class TagerMailLog extends Model
         'debug',
         'error',
     ];
+
+    public function template()
+    {
+        return $this->hasOne(TagerMailTemplate::class);
+    }
 }

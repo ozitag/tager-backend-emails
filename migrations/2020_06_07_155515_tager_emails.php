@@ -27,13 +27,15 @@ class TagerEmails extends Migration
 
         Schema::create('tager_mail_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('template')->nullable();
+            $table->unsignedBigInteger('template_id');
             $table->string('email');
             $table->string('subject');
             $table->string('body');
             $table->string('status');
             $table->boolean('debug')->default(false);
             $table->timestamps();
+
+            $table->foreign('template_id')->references('id')->on('tager_mail_templates');
         });
     }
 
