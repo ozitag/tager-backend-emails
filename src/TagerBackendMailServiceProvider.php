@@ -2,11 +2,20 @@
 
 namespace OZiTAG\Tager\Backend\Mail;
 
+use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Support\ServiceProvider;
 use OZiTAG\Tager\Backend\Mail\Commands\FlushMailTemplatesCommand;
+use OZiTAG\Tager\Backend\Mail\Events\MessageSentHandler;
 
-class TagerBackendMailServiceProvider extends ServiceProvider
+class TagerBackendMailServiceProvider extends EventServiceProvider
 {
+    protected $listen = [
+        MessageSent::class => [
+            MessageSentHandler::class
+        ],
+    ];
+
     /**
      * Register any application services.
      *
@@ -39,5 +48,7 @@ class TagerBackendMailServiceProvider extends ServiceProvider
                 FlushMailTemplatesCommand::class,
             ]);
         }
+
+        parent::boot();
     }
 }

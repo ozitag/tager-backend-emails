@@ -4,12 +4,16 @@ namespace OZiTAG\Tager\Backend\Mail\Jobs;
 
 use OZiTAG\Tager\Backend\Core\QueueJob;
 use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailSenderException;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailLog;
 use App\Models\Product;
 use App\Repositories\Interfaces\IProductReviewRepository;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
+use OZiTAG\Tager\Backend\Mail\Senders\SenderFactory;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailSender;
 
-class ProcessSendingRealMailJob extends QueueJob
+class ProcessSendingRealMailJob
 {
     /** @var string */
     private $to;
@@ -31,7 +35,7 @@ class ProcessSendingRealMailJob extends QueueJob
         $this->logId = $logId;
     }
 
-    public function handle(MailLogRepository $mailLogRepository)
+    public function handle(MailLogRepository $mailLogRepository, TagerMailConfig $tagerMailConfig, TagerMailSender $sender)
     {
         $logModel = $mailLogRepository->find($this->logId);
         if (!$logModel) {
@@ -39,6 +43,15 @@ class ProcessSendingRealMailJob extends QueueJob
         }
 
         $logModel->status = TagerMailStatus::Sending;
+        $logModel->save();
+
+        try {
+            $sender->send($this->to, $this->subject, $this->body, ['logId' => $logModel->id]);
+        } catch (TagerMailSenderException $exception) {
+            $logModel->status = TagerMailStatus::Failure;
+            $logModel->error = $exception->getMessage();
+        }
+
         $logModel->save();
     }
 }

@@ -33,6 +33,7 @@ class TagerEmails extends Migration
             $table->string('body');
             $table->string('status');
             $table->boolean('debug')->default(false);
+            $table->text('error')->nullable();
             $table->timestamps();
 
             $table->foreign('template_id')->references('id')->on('tager_mail_templates');

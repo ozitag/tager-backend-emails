@@ -31,7 +31,7 @@ class TagerMail
 
     private function sendDebugMail($to, $subject, $body, ?TagerMailTemplate $template = null)
     {
-        $logModel = $this->createLog($to, $subject, $body);
+        $logModel = $this->createLog($to, $subject, $body, $template);
         $logModel->status = TagerMailStatus::Success;
         $logModel->debug = true;
         $logModel->save();
@@ -39,7 +39,7 @@ class TagerMail
 
     private function sendRealMail($to, $subject, $body, ?TagerMailTemplate $template = null)
     {
-        $logModel = $this->createLog($to, $subject, $body);
+        $logModel = $this->createLog($to, $subject, $body, $template);
 
         dispatch(new ProcessSendingRealMailJob(
             $to,
