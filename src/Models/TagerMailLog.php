@@ -17,7 +17,7 @@ class TagerMailLog extends Model
      */
     protected $fillable = [
         'template_id',
-        'email',
+        'recipient',
         'subject',
         'body',
         'status',

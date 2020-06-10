@@ -27,8 +27,8 @@ class TagerEmails extends Migration
 
         Schema::create('tager_mail_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('template_id');
-            $table->string('email');
+            $table->unsignedBigInteger('template_id')->nullable();
+            $table->string('recipient');
             $table->string('subject');
             $table->string('body');
             $table->string('status');
@@ -46,7 +46,7 @@ class TagerEmails extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tager_mail_templates');
         Schema::dropIfExists('tager_mail_logs');
+        Schema::dropIfExists('tager_mail_templates');
     }
 }

@@ -8,6 +8,7 @@ use OZiTAG\Tager\Backend\Mail\Models\TagerMailLog;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
+use OZiTAG\Tager\Backend\Mail\Jobs\ProcessSendingRealMailJob;
 
 class TagerMail
 {
@@ -19,8 +20,8 @@ class TagerMail
     private function createLog($to, $subject, $body, ?TagerMailTemplate $template = null)
     {
         $log = new TagerMailLog();
-        $log->template = $template ? $template->id : null;
-        $log->email = $to;
+        $log->template_id = $template ? $template->id : null;
+        $log->recipient = $to;
         $log->subject = $subject;
         $log->body = $body;
         $log->status = TagerMailStatus::Created;
@@ -40,7 +41,12 @@ class TagerMail
     {
         $logModel = $this->createLog($to, $subject, $body);
 
-        // mail($to, $subject, $body);
+        dispatch(new ProcessSendingRealMailJob(
+            $to,
+            $subject,
+            $body,
+            $logModel->id
+        ));
     }
 
     public function sendMail($to, $subject, $body)
@@ -75,7 +81,6 @@ class TagerMail
             }
         }
 
-        $recipients = [];
         if (!is_null($to)) {
             $recipients = is_array($to) ? $to : [$to];
         } else {
@@ -88,9 +93,9 @@ class TagerMail
 
         foreach ($recipients as $recipient) {
             if ($this->config()->isDebug()) {
-                $this->sendDebugMail($to, $subject, $body, $templateModel);
+                $this->sendDebugMail($recipient, $templateModel->subject, $body, $templateModel);
             } else {
-                $this->sendRealMail($to, $subject, $body, $templateModel);
+                $this->sendRealMail($recipient, $templateModel->subject, $body, $templateModel);
             }
         }
     }
