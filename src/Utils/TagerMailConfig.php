@@ -21,6 +21,32 @@ class TagerMailConfig
         return $result;
     }
 
+    /**
+     * @param string $template
+     * @return array
+     */
+    public function getTemplateVariables($template)
+    {
+        $config = config('tager-mail.templates');
+
+        $template = $config[$template] ?? null;
+        if (!$template) {
+            return [];
+        }
+
+        $params = $template['templateParams'] ?? [];
+
+        $result = [];
+        foreach ($params as $name => $label) {
+            $result[] = [
+                'variable' => $name,
+                'label' => $label
+            ];
+        }
+
+        return $result;
+    }
+
     public function isTemplateExists($template)
     {
         return false;

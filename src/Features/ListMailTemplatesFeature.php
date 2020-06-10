@@ -12,15 +12,6 @@ class ListMailTemplatesFeature extends Feature
 {
     public function handle(MailTemplateRepository $repository, TagerMailConfig $config)
     {
-        $result = MailTemplateResource::collection($repository->all());
-
-        foreach ($config->getConfigTemplates() as $configTemplate) {
-            $result['data'][] = [
-                'template' => $configTemplate['id'],
-                'title' => $configTemplate['title']
-            ];
-        }
-
-        return $result;
+        return MailTemplateResource::collection($repository->all());
     }
 }

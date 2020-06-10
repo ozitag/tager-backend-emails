@@ -17,8 +17,8 @@ class TagerEmails extends Migration
             $table->id();
             $table->string('template');
             $table->string('name');
-            $table->text('value')->nullable();
             $table->string('subject')->nullable();
+            $table->text('body')->nullable();
             $table->string('recipients')->nullable();
             $table->boolean('changed_by_admin')->default(false);
             $table->timestamps();

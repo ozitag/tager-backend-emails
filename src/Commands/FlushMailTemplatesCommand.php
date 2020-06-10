@@ -49,7 +49,7 @@ class FlushMailTemplatesCommand extends Command
                 }
 
                 $model->subject = $data['subject'] ?? '';
-                $model->value = $data['value'] ?? '';
+                $model->body = $data['body'] ?? '';
             }
 
             $model->name = $data['name'];
