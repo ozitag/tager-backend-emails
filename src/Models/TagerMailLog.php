@@ -27,6 +27,15 @@ class TagerMailLog extends Model
 
     public function template()
     {
-        return $this->hasOne(TagerMailTemplate::class);
+        return $this->belongsTo(TagerMailTemplate::class, );
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('created_at', 'desc');
+        });
     }
 }

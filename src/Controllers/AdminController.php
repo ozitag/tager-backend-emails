@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 use OZiTAG\Tager\Backend\Core\Controller;
 use OZiTAG\Tager\Backend\Core\SuccessResource;
 use OZiTAG\Tager\Backend\Admin\Resources\ProfileResource;
+use OZiTAG\Tager\Backend\Mail\Features\ListMailLogsFeature;
 use OZiTAG\Tager\Backend\Mail\Features\ListMailTemplatesFeature;
 use OZiTAG\Tager\Backend\Mail\Features\UpdateMailTemplateFeature;
 use OZiTAG\Tager\Backend\Mail\Features\ViewMailTemplateFeature;
 
-class AdminTemplatesController extends Controller
+class AdminController extends Controller
 {
-    public function index(Request $request)
+    public function logs(Request $request)
+    {
+        return $this->serve(ListMailLogsFeature::class);
+    }
+
+    public function templates(Request $request)
     {
         $template = $request->get('template');
 
