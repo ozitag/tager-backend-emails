@@ -15,12 +15,14 @@ class TagerEmails extends Migration
     {
         Schema::create('tager_mail_templates', function (Blueprint $table) {
             $table->id();
-            $table->string('template_id');
+            $table->string('template');
             $table->string('name');
-            $table->string('value');
-            $table->string('subject');
-            $table->string('recipients');
+            $table->text('value')->nullable();
+            $table->string('subject')->nullable();
+            $table->string('recipients')->nullable();
+            $table->boolean('changed_by_admin')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('tager_mail_logs', function (Blueprint $table) {

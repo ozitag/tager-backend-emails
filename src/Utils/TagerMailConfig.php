@@ -9,9 +9,16 @@ use OZiTAG\Tager\Backend\Admin\Resources\ProfileResource;
 
 class TagerMailConfig
 {
-    public function getTemplates()
+    public function getConfigTemplates()
     {
+        $config = config('tager-mail.templates');
 
+        $result = [];
+        foreach ($config as $id => $template) {
+            $result[] = ['id' => $id, 'title' => $template['title']];
+        }
+
+        return $result;
     }
 
     public function isTemplateExists($template)

@@ -15,7 +15,7 @@
     "php": "^7.2.5",
     "doctrine/dbal": "^2.10",
     "laravel/framework": "^7.0",
-    "ozitag/tager-backend-core": "^0.1"
+    "ozitag/tager-backend-core": "^0.1.2"
   },
   "autoload": {
     "psr-4": {
