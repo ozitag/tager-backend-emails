@@ -31,7 +31,7 @@ class TagerMail
         return $log;
     }
 
-    private function sendDebugMail($to, $subject, $body, ?TagerMailTemplate $template = null, ?TagerMailAttachments $attachments = null)
+    private function sendDebugMail($to, $subject, $body, ?TagerMailAttachments $attachments = null, ?TagerMailTemplate $template = null)
     {
         $logModel = $this->createLog($to, $subject, $body, $template, $attachments);
         $logModel->status = TagerMailStatus::Success;
