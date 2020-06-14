@@ -7,6 +7,7 @@ use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailInvalidTemplateException;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailLog;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 use OZiTAG\Tager\Backend\Mail\Jobs\ProcessSendingRealMailJob;
 
@@ -17,7 +18,7 @@ class TagerMail
         return new TagerMailConfig();
     }
 
-    private function createLog($to, $subject, $body, ?TagerMailTemplate $template = null)
+    private function createLog($to, $subject, $body, ?TagerMailTemplate $template = null, ?TagerMailAttachments $attachments = null)
     {
         $log = new TagerMailLog();
         $log->template_id = $template ? $template->id : null;
@@ -25,40 +26,42 @@ class TagerMail
         $log->subject = $subject;
         $log->body = $body;
         $log->status = TagerMailStatus::Created;
+        $log->attachments = $attachments ? $attachments->getLogString() : null;
         $log->save();
         return $log;
     }
 
-    private function sendDebugMail($to, $subject, $body, ?TagerMailTemplate $template = null)
+    private function sendDebugMail($to, $subject, $body, ?TagerMailTemplate $template = null, ?TagerMailAttachments $attachments = null)
     {
-        $logModel = $this->createLog($to, $subject, $body, $template);
+        $logModel = $this->createLog($to, $subject, $body, $template, $attachments);
         $logModel->status = TagerMailStatus::Success;
         $logModel->debug = true;
         $logModel->save();
     }
 
-    private function sendRealMail($to, $subject, $body, ?TagerMailTemplate $template = null)
+    private function sendRealMail($to, $subject, $body, ?TagerMailAttachments $attachments = null, ?TagerMailTemplate $template = null)
     {
-        $logModel = $this->createLog($to, $subject, $body, $template);
+        $logModel = $this->createLog($to, $subject, $body, $template, $attachments);
 
         dispatch(new ProcessSendingRealMailJob(
             $to,
             $subject,
             $body,
-            $logModel->id
+            $logModel->id,
+            $attachments
         ));
     }
 
-    public function sendMail($to, $subject, $body)
+    public function sendMail($to, $subject, $body, ?TagerMailAttachments $attachments = null)
     {
         if ($this->config()->isDebug()) {
-            $this->sendDebugMail($to, $subject, $body);
+            $this->sendDebugMail($to, $subject, $body, $attachments);
         } else {
-            $this->sendRealMail($to, $subject, $body);
+            $this->sendRealMail($to, $subject, $body, $attachments);
         }
     }
 
-    public function sendMailUsingTemplate($template, $templateValues = [], $to = null)
+    public function sendMailUsingTemplate($template, $templateValues = [], $to = null, ?TagerMailAttachments $attachments = null)
     {
         $repository = new MailTemplateRepository(new TagerMailTemplate());
 
@@ -93,9 +96,9 @@ class TagerMail
 
         foreach ($recipients as $recipient) {
             if ($this->config()->isDebug()) {
-                $this->sendDebugMail($recipient, $templateModel->subject, $body, $templateModel);
+                $this->sendDebugMail($recipient, $templateModel->subject, $body, $attachments, $templateModel);
             } else {
-                $this->sendRealMail($recipient, $templateModel->subject, $body, $templateModel);
+                $this->sendRealMail($recipient, $templateModel->subject, $body, $attachments, $templateModel);
             }
         }
     }

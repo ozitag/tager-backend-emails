@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Repositories\Interfaces\IProductReviewRepository;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 use OZiTAG\Tager\Backend\Mail\Senders\SenderFactory;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailSender;
 
@@ -27,14 +28,18 @@ class ProcessSendingRealMailJob
     /** @var integer */
     private $logId;
 
-    public function __construct($to, $subject, $body, $logId)
+    /** @var TagerMailAttachments|null */
+    private $attachments = null;
+
+    public function __construct($to, $subject, $body, $logId, ?TagerMailAttachments $attachments = null)
     {
         $this->to = $to;
         $this->subject = $subject;
         $this->body = $body;
         $this->logId = $logId;
+        $this->attachments = $attachments;
     }
-
+    
     public function handle(MailLogRepository $mailLogRepository, TagerMailConfig $tagerMailConfig, TagerMailSender $sender)
     {
         $logModel = $mailLogRepository->find($this->logId);
@@ -46,8 +51,8 @@ class ProcessSendingRealMailJob
         $logModel->save();
 
         try {
-            $sender->send($this->to, $this->subject, $this->body, ['logId' => $logModel->id]);
-        } catch (TagerMailSenderException $exception) {
+            $sender->send($this->to, $this->subject, $this->body, $this->attachments, ['logId' => $logModel->id]);
+        } catch (\Exception $exception) {
             $logModel->status = TagerMailStatus::Failure;
             $logModel->error = $exception->getMessage();
         }
