@@ -15,7 +15,9 @@ class TagerMailSender
                 $message->setBody($body, 'text/html', 'UTF-8');
                 $message->setTo($to);
                 $message->setSubject($subject);
-                $attachments->injectToMessage($message);
+                if ($attachments) {
+                    $attachments->injectToMessage($message);
+                }
             });
         } catch (\Exception $exception) {
             throw new TagerMailSenderException($exception->getMessage());
