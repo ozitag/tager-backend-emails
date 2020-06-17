@@ -53,7 +53,7 @@ class TagerMailAttachments
                 $options['mime'] = $item['mime'];
             }
 
-            $message->attach($item['path']);
+            $message->attach($item['path'], $options);
         }
     }
 }
