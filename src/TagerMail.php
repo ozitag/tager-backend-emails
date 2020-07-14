@@ -18,21 +18,42 @@ class TagerMail
         return new TagerMailConfig();
     }
 
+    /**
+     * @return bool
+     */
+    private function isApplicationHasDatabase()
+    {
+        return $this->config()->hasDatabase();
+    }
+
     private function createLog($to, $subject, $body, ?TagerMailTemplate $template = null, ?TagerMailAttachments $attachments = null)
     {
+        if (!$this->isApplicationHasDatabase()) {
+            return null;
+        }
+
         $log = new TagerMailLog();
+        
         $log->template_id = $template ? $template->id : null;
         $log->recipient = $to;
         $log->subject = $subject;
         $log->body = $body;
         $log->status = TagerMailStatus::Created;
         $log->attachments = $attachments ? $attachments->getLogString() : null;
-        $log->save();
+
+        if (!$log->save()) {
+            return null;
+        }
+
         return $log;
     }
 
     private function sendDebugMail($to, $subject, $body, ?TagerMailAttachments $attachments = null, ?TagerMailTemplate $template = null)
     {
+        if (!$this->isApplicationHasDatabase()) {
+            return;
+        }
+
         $logModel = $this->createLog($to, $subject, $body, $template, $attachments);
         $logModel->status = TagerMailStatus::Success;
         $logModel->debug = true;
@@ -47,7 +68,7 @@ class TagerMail
             $to,
             $subject,
             $body,
-            $logModel->id,
+            $logModel ? $logModel->id : null,
             $attachments
         ));
     }
@@ -61,22 +82,52 @@ class TagerMail
         }
     }
 
+    private function getMailParams($template)
+    {
+        if ($this->isApplicationHasDatabase()) {
+            $repository = new MailTemplateRepository(new TagerMailTemplate());
+
+            $templateModel = $repository->findByTemplate($template);
+            if (!$templateModel) {
+                throw new TagerMailInvalidTemplateException();
+            }
+
+            return [
+                'subject' => $templateModel->subject,
+                'body' => $templateModel->body,
+                'recipients' => $templateModel->recipients ? explode(',', $templateModel->recipients) : [],
+                'model' => $templateModel
+            ];
+        } else {
+            $template = $this->config()->getTemplate($template);
+            if (!$template) {
+                throw new TagerMailInvalidTemplateException();
+            }
+
+            return [
+                'subject' => $template['subject'] ?? null,
+                'body' => $template['body'] ?? null,
+                'recipients' => $template['recipients'] ?? [],
+                'model' => null
+            ];
+        }
+    }
+
     public function sendMailUsingTemplate($template, $templateValues = [], $to = null, ?TagerMailAttachments $attachments = null)
     {
-        $repository = new MailTemplateRepository(new TagerMailTemplate());
+        $templateParams = $this->getMailParams($template);
 
-        $templateModel = $repository->findByTemplate($template);
-        if (!$templateModel) {
-            throw new TagerMailInvalidTemplateException();
-        }
-
-        if (empty($templateModel->subject) || empty($templateModel->body)) {
+        if (empty($templateParams['subject']) || empty($templateParams['body'])) {
             throw new TagerMailInvalidTemplateException('Subject or Body is empty');
         }
 
-        $params = $this->config()->getTemplateVariables($templateModel->template);
+        $body = $templateParams['body'];
+        $subject = $templateParams['subject'];
+        $recipients = $templateParams['recipients'];
+        $model = $templateParams['model'];
 
-        $body = $templateModel->body;
+        $params = $this->config()->getTemplateVariables($template);
+
         foreach ($params as $param) {
             $variable = $param['variable'];
             if (isset($templateValues[$variable])) {
@@ -86,8 +137,6 @@ class TagerMail
 
         if (!is_null($to)) {
             $recipients = is_array($to) ? $to : [$to];
-        } else {
-            $recipients = $templateModel->recipients ? explode(',', $templateModel->recipients) : [];
         }
 
         if (empty($recipients)) {
@@ -96,9 +145,9 @@ class TagerMail
 
         foreach ($recipients as $recipient) {
             if ($this->config()->isDebug()) {
-                $this->sendDebugMail($recipient, $templateModel->subject, $body, $attachments, $templateModel);
+                $this->sendDebugMail($recipient, $subject, $body, $attachments, $model);
             } else {
-                $this->sendRealMail($recipient, $templateModel->subject, $body, $attachments, $templateModel);
+                $this->sendRealMail($recipient, $subject, $body, $attachments, $model);
             }
         }
     }

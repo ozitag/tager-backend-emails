@@ -25,13 +25,13 @@ class ProcessSendingRealMailJob
     /** @var string */
     private $body;
 
-    /** @var integer */
+    /** @var null|integer */
     private $logId;
 
     /** @var TagerMailAttachments|null */
     private $attachments = null;
 
-    public function __construct($to, $subject, $body, $logId, ?TagerMailAttachments $attachments = null)
+    public function __construct($to, $subject, $body, $logId = null, ?TagerMailAttachments $attachments = null)
     {
         $this->to = $to;
         $this->subject = $subject;
@@ -39,24 +39,28 @@ class ProcessSendingRealMailJob
         $this->logId = $logId;
         $this->attachments = $attachments;
     }
-    
+
     public function handle(MailLogRepository $mailLogRepository, TagerMailConfig $tagerMailConfig, TagerMailSender $sender)
     {
-        $logModel = $mailLogRepository->find($this->logId);
-        if (!$logModel) {
-            return;
+        $logModel = $this->logId ? $mailLogRepository->find($this->logId) : null;
+        if ($logModel) {
+            $logModel->status = TagerMailStatus::Sending;
+            $logModel->save();
         }
-
-        $logModel->status = TagerMailStatus::Sending;
-        $logModel->save();
 
         try {
-            $sender->send($this->to, $this->subject, $this->body, $this->attachments, ['logId' => $logModel->id]);
+            $sender->send($this->to, $this->subject, $this->body, $this->attachments, ['logId' => $this->logId]);
         } catch (\Exception $exception) {
-            $logModel->status = TagerMailStatus::Failure;
-            $logModel->error = $exception->getMessage();
+            if ($logModel) {
+                $logModel->status = TagerMailStatus::Failure;
+                $logModel->error = $exception->getMessage();
+            } else if (!$this->logId) {
+                throw $exception;
+            }
         }
 
-        $logModel->save();
+        if ($logModel) {
+            $logModel->save();
+        }
     }
 }

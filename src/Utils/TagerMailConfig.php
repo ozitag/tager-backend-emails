@@ -9,11 +9,7 @@ use OZiTAG\Tager\Backend\Admin\Resources\ProfileResource;
 
 class TagerMailConfig
 {
-    /**
-     * @param string $template
-     * @return array
-     */
-    public function getTemplateVariables($template)
+    public function getTemplate($template)
     {
         $config = config('tager-mail.templates');
 
@@ -21,6 +17,17 @@ class TagerMailConfig
         if (!$template) {
             return [];
         }
+
+        return $template;
+    }
+
+    /**
+     * @param string $template
+     * @return array
+     */
+    public function getTemplateVariables($template)
+    {
+        $template = $this->getTemplate($template);
 
         $params = $template['templateParams'] ?? [];
 
@@ -41,5 +48,13 @@ class TagerMailConfig
     public function isDebug()
     {
         return (boolean)config('tager-mail.debug', false);
+    }
+
+    /**
+     *
+     */
+    public function hasDatabase()
+    {
+        return !(boolean)config('tager-mail.no_database', false);
     }
 }

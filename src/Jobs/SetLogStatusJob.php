@@ -30,6 +30,7 @@ class SetLogStatusJob
     public function handle(MailLogRepository $repository)
     {
         $item = $repository->find($this->itemId);
+        
         if ($item) {
             $item->status = $this->status;
             $item->save();

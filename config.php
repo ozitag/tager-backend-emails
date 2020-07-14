@@ -1,12 +1,8 @@
 <?php
 
 return [
-    'provider' => [
-        'id' => 'mailgun',
-        'params' => [
-            'apiKey' => 'XXXXXX'
-        ],
-    ],
+    'debug' => false,
+    'no_database' => false,
     'templates' => [
         'contactForm' => [
             'label' => 'Contact form',

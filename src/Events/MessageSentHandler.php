@@ -16,7 +16,10 @@ class MessageSentHandler
      */
     public function handle(MessageSent $event)
     {
-        $logItemId = $event->data['eventData']['logId'] ?? [];
+        $logItemId = $event->data['eventData']['logId'] ?? null;
+        if (!$logItemId) {
+            return;
+        }
         dispatch(new SetLogStatusJob($logItemId, TagerMailStatus::Success));
     }
 
