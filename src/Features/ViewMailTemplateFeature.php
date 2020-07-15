@@ -9,16 +9,16 @@ use OZiTAG\Tager\Backend\Mail\Resources\MailTemplateResource;
 
 class ViewMailTemplateFeature extends Feature
 {
-    private $template;
+    private $alias;
 
-    public function __construct($template)
+    public function __construct($alias)
     {
-        $this->template = $template;
+        $this->alias = $alias;
     }
 
     public function handle(MailTemplateRepository $repository)
     {
-        $model = $repository->findByTemplate($this->template);
+        $model = $repository->findByTemplate($this->alias);
         if (!$model) {
             abort(404, 'Template not found');
         }

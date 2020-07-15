@@ -34,7 +34,7 @@ class TagerMailConfig
         $result = [];
         foreach ($params as $name => $label) {
             $result[] = [
-                'variable' => $name,
+                'key' => $name,
                 'label' => $label
             ];
         }

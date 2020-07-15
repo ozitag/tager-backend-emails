@@ -21,11 +21,11 @@ class AdminController extends Controller
 
     public function templates(Request $request)
     {
-        $template = $request->get('template');
+        $alias = $request->get('alias');
 
-        if (!empty($template)) {
+        if (!empty($alias)) {
             return $this->serve(ViewMailTemplateFeature::class, [
-                'template' => $template
+                'alias' => $alias
             ]);
         }
 

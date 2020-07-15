@@ -21,7 +21,7 @@ class MailTemplateResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'template' => (string)$this->template,
+            'alias' => (string)$this->template,
             'name' => (string)$this->name,
             'subject' => (string)$this->subject,
             'body' => (string)$this->body,

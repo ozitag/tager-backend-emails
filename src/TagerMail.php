@@ -129,7 +129,7 @@ class TagerMail
         $params = $this->config()->getTemplateVariables($template);
 
         foreach ($params as $param) {
-            $variable = $param['variable'];
+            $variable = $param['key'];
             if (isset($templateValues[$variable])) {
                 $body = str_replace('{{' . $variable . '}}', $templateValues[$variable], $body);
             }
