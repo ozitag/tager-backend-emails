@@ -35,7 +35,7 @@ class AdminController extends Controller
     public function update(Request $request)
     {
         return $this->serve(UpdateMailTemplateFeature::class, [
-            'template' => $request->get('template')
+            'alias' => $request->get('alias')
         ]);
     }
 }
