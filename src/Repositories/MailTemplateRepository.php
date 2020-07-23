@@ -4,7 +4,6 @@ namespace OZiTAG\Tager\Backend\Mail\Repositories;
 
 use OZiTAG\Tager\Backend\Core\Repositories\EloquentRepository;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
-use OZiTAG\Tager\Backend\Seo\Models\SeoPage;
 
 class MailTemplateRepository extends EloquentRepository
 {

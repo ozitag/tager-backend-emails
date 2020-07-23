@@ -2,7 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Enums;
 
-use OZiTAG\Tager\Backend\Core\Enum;
+use OZiTAG\Tager\Backend\Core\Enums\Enum;
 
 final class TagerMailStatus extends Enum
 {

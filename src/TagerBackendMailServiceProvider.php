@@ -4,8 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Mail\Events\MessageSent;
-use Illuminate\Support\ServiceProvider;
-use OZiTAG\Tager\Backend\Mail\Commands\FlushMailTemplatesCommand;
+use OZiTAG\Tager\Backend\Mail\Console\FlushMailTemplatesCommand;
 use OZiTAG\Tager\Backend\Mail\Events\MessageSentHandler;
 
 class TagerBackendMailServiceProvider extends EventServiceProvider

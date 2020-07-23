@@ -2,11 +2,8 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use OZiTAG\Tager\Backend\Core\Controller;
-use OZiTAG\Tager\Backend\Core\SuccessResource;
-use OZiTAG\Tager\Backend\Admin\Resources\ProfileResource;
+use OZiTAG\Tager\Backend\Core\Controllers\Controller;
 use OZiTAG\Tager\Backend\Mail\Features\ListMailLogsFeature;
 use OZiTAG\Tager\Backend\Mail\Features\ListMailTemplatesFeature;
 use OZiTAG\Tager\Backend\Mail\Features\UpdateMailTemplateFeature;

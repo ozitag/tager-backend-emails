@@ -1,12 +1,9 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Mail\Commands;
+namespace OZiTAG\Tager\Backend\Mail\Console;
 
 use Illuminate\Console\Command;
-use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
-use OZiTAG\Tager\Backend\Seo\Models\SeoPage;
-use OZiTAG\Tager\Backend\Seo\Repositories\SeoPageRepository;
 
 class FlushMailTemplatesCommand extends Command
 {

@@ -2,8 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Requests;
 
-use Ozerich\FileStorage\Rules\FileRule;
-use OZiTAG\Tager\Backend\Core\FormRequest;
+use OZiTAG\Tager\Backend\Core\Http\FormRequest;
 
 class UpdateTemplateRequest extends FormRequest
 {

@@ -3,8 +3,6 @@
 namespace OZiTAG\Tager\Backend\Mail\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Ozerich\FileStorage\Models\File;
 
 class TagerMailLog extends Model
 {

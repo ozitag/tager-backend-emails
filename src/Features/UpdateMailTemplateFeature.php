@@ -2,8 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Features;
 
-use OZiTAG\Tager\Backend\Core\Feature;
-use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
+use OZiTAG\Tager\Backend\Core\Features\Feature;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
 use OZiTAG\Tager\Backend\Mail\Requests\UpdateTemplateRequest;
 use OZiTAG\Tager\Backend\Mail\Resources\MailTemplateResource;

@@ -3,10 +3,7 @@
 namespace OZiTAG\Tager\Backend\Mail\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Ozerich\FileStorage\Models\File;
-use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
-use OZiTAG\Tager\Backend\Seo\Models\SeoPage;
 
 class MailTemplateResource extends JsonResource
 {

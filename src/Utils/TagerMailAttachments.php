@@ -3,11 +3,7 @@
 namespace OZiTAG\Tager\Backend\Mail\Utils;
 
 use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Auth;
 use Ozerich\FileStorage\Models\File;
-use OZiTAG\Tager\Backend\Core\Controller;
-use OZiTAG\Tager\Backend\Core\SuccessResource;
-use OZiTAG\Tager\Backend\Admin\Resources\ProfileResource;
 
 class TagerMailAttachments
 {
