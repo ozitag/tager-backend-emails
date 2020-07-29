@@ -9,16 +9,16 @@ use OZiTAG\Tager\Backend\Mail\Resources\MailTemplateResource;
 
 class UpdateMailTemplateFeature extends Feature
 {
-    private $alias;
+    private $id;
 
-    public function __construct($alias)
+    public function __construct($id)
     {
-        $this->alias = $alias;
+        $this->id = $id;
     }
 
     public function handle(UpdateTemplateRequest $request, MailTemplateRepository $repository)
     {
-        $model = $repository->findByTemplate($this->alias);
+        $model = $repository->find($this->id);
         if (!$model) {
             abort(404, 'Template not found');
         }

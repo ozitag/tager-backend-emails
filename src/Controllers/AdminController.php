@@ -16,7 +16,7 @@ class AdminController extends Controller
         return $this->serve(ListMailLogsFeature::class);
     }
 
-    public function templates(Request $request)
+    public function templates()
     {
         $alias = $request->get('alias');
 
@@ -29,10 +29,17 @@ class AdminController extends Controller
         return $this->serve(ListMailTemplatesFeature::class);
     }
 
-    public function update(Request $request)
+    public function view($id)
+    {
+        return $this->serve(ViewMailTemplateFeature::class, [
+            'id' => $id
+        ]);
+    }
+
+    public function update($id)
     {
         return $this->serve(UpdateMailTemplateFeature::class, [
-            'alias' => $request->get('alias')
+            'id' => $id
         ]);
     }
 }
