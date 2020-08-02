@@ -7,7 +7,7 @@ use Illuminate\Mail\Events\MessageSent;
 use OZiTAG\Tager\Backend\Mail\Console\FlushMailTemplatesCommand;
 use OZiTAG\Tager\Backend\Mail\Events\MessageSentHandler;
 
-class TagerBackendMailServiceProvider extends EventServiceProvider
+class MailServiceProvider extends EventServiceProvider
 {
     protected $listen = [
         MessageSent::class => [
