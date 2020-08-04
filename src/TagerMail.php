@@ -33,7 +33,7 @@ class TagerMail
         }
 
         $log = new TagerMailLog();
-        
+
         $log->template_id = $template ? $template->id : null;
         $log->recipient = $to;
         $log->subject = $subject;
@@ -89,7 +89,7 @@ class TagerMail
 
             $templateModel = $repository->findByTemplate($template);
             if (!$templateModel) {
-                throw new TagerMailInvalidTemplateException();
+                throw new TagerMailInvalidTemplateException($template);
             }
 
             return [
@@ -101,7 +101,7 @@ class TagerMail
         } else {
             $template = $this->config()->getTemplate($template);
             if (!$template) {
-                throw new TagerMailInvalidTemplateException();
+                throw new TagerMailInvalidTemplateException($template);
             }
 
             return [
@@ -118,7 +118,7 @@ class TagerMail
         $templateParams = $this->getMailParams($template);
 
         if (empty($templateParams['subject']) || empty($templateParams['body'])) {
-            throw new TagerMailInvalidTemplateException('Subject or Body is empty');
+            throw new TagerMailInvalidTemplateException($template, 'Subject or Body is empty');
         }
 
         $body = $templateParams['body'];
