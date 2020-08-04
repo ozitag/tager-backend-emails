@@ -2,12 +2,13 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Jobs;
 
+use OZiTAG\Tager\Backend\Core\Jobs\QueueJob;
 use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
-use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailSender;
 
-class ProcessSendingRealMailJob
+class ProcessSendingRealMailJob extends QueueJob
 {
     /** @var string */
     private $to;
@@ -33,27 +34,33 @@ class ProcessSendingRealMailJob
         $this->attachments = $attachments;
     }
 
-    public function handle(MailLogRepository $mailLogRepository, TagerMailSender $sender)
+    private function setLogStatus($status, $response = null, $error = null)
     {
-        $logModel = $this->logId ? $mailLogRepository->find($this->logId) : null;
-        if ($logModel) {
-            $logModel->status = TagerMailStatus::Sending;
-            $logModel->save();
+        dispatch(new SetLogStatusJob($this->logId, $status, $response, $error));
+    }
+
+    /**
+     * @return bool
+     */
+    private function isRecipientAllowed()
+    {
+        $validEmails = TagerMailConfig::getAllowedEmails();
+        return $validEmails == '*' || in_array($this->to, $validEmails);
+    }
+
+    public function handle(TagerMailSender $sender)
+    {
+        if ($this->isRecipientAllowed() == false) {
+            $this->setLogStatus(TagerMailStatus::Skip);
+            return;
         }
+
+        $this->setLogStatus(TagerMailStatus::Sending);
 
         try {
             $sender->send($this->to, $this->subject, $this->body, $this->attachments, ['logId' => $this->logId]);
         } catch (\Exception $exception) {
-            if ($logModel) {
-                $logModel->status = TagerMailStatus::Failure;
-                $logModel->error = $exception->getMessage();
-            } else if (!$this->logId) {
-                throw $exception;
-            }
-        }
-
-        if ($logModel) {
-            $logModel->save();
+            $this->setLogStatus(TagerMailStatus::Failure, null, $exception->getMessage());
         }
     }
 }

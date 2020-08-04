@@ -19,7 +19,8 @@ class TagerMailLog extends Model
         'subject',
         'body',
         'status',
-        'debug',
+        'template',
+        'service_response',
         'error',
     ];
 

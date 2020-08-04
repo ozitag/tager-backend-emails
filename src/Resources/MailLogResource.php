@@ -10,13 +10,13 @@ class MailLogResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'template' => $this->template ? $this->template->name : null,
+            'template' => $this->template,
             'recipient' => $this->recipient,
             'subject' => $this->subject,
             'body' => $this->body,
-            'isDebug' => (boolean)$this->debug,
             'status' => $this->status,
             'error' => $this->error,
+            'serviceResponse' => $this->serviceResponse,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at
         ];

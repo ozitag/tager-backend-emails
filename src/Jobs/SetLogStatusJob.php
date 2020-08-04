@@ -2,29 +2,42 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Jobs;
 
+use OZiTAG\Tager\Backend\Core\Jobs\Job;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 
-class SetLogStatusJob
+class SetLogStatusJob extends Job
 {
-    /** @var integer */
-    private $itemId;
+    private $logId;
 
-    /** @var string */
     private $status;
 
-    public function __construct($logItemId, $status)
+    private $error;
+
+    private $response;
+
+    public function __construct($logId, $status, $response, $error = null)
     {
-        $this->itemId = $logItemId;
+        $this->logId = $logId;
         $this->status = $status;
+        $this->error = $error;
+        $this->response = $response;
     }
 
     public function handle(MailLogRepository $repository)
     {
-        $item = $repository->find($this->itemId);
-        
-        if ($item) {
-            $item->status = $this->status;
-            $item->save();
+        if (!$this->logId) {
+            return;
         }
+
+        $found = $repository->setById($this->logId);
+        if (!$found) {
+            return;
+        }
+
+        $repository->fillAndSave([
+            'status' => $this->status,
+            'error' => $this->error,
+            'service_response' => $this->response
+        ]);
     }
 }

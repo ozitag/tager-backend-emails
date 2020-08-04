@@ -4,7 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail\Utils;
 
 class TagerMailConfig
 {
-    public function getTemplate($template)
+    public static function getTemplate($template)
     {
         $config = config('tager-mail.templates');
 
@@ -38,18 +38,45 @@ class TagerMailConfig
     }
 
     /**
-     * @return boolean
-     */
-    public function isDebug()
-    {
-        return (boolean)config('tager-mail.debug', false);
-    }
-
-    /**
      *
      */
-    public function hasDatabase()
+    public static function hasDatabase()
     {
         return !(boolean)config('tager-mail.no_database', false);
     }
+
+    /**
+     * @return bool
+     */
+    public static function isDisabled()
+    {
+        return (boolean)config('tager-mail.disabled', false);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getSubjectTemplate()
+    {
+        return (string)config('tager-mail.subject_template', '{subject}');
+    }
+
+    /**
+     * @return array|string
+     */
+    public static function getAllowedEmails()
+    {
+        $value = config('tager-mail.allow_emails');
+        if (is_null($value)) {
+            return '*';
+        }
+
+        if (!$value) {
+            return [];
+        }
+
+        return is_array($value) ? $value : explode(',', $value);
+    }
+
+
 }
