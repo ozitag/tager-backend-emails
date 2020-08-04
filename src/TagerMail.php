@@ -82,35 +82,54 @@ class TagerMail
         }
     }
 
+    private function getMailParamsByDatabase($template)
+    {
+        $repository = new MailTemplateRepository(new TagerMailTemplate());
+
+        $templateModel = $repository->findByTemplate($template);
+        if (!$templateModel) {
+            return null;
+        }
+
+        return [
+            'subject' => $templateModel->subject,
+            'body' => $templateModel->body,
+            'recipients' => $templateModel->recipients ? explode(',', $templateModel->recipients) : [],
+            'model' => $templateModel
+        ];
+    }
+
+    private function getMailParamsByConfig($template)
+    {
+        $template = $this->config()->getTemplate($template);
+        if (!$template) {
+            return null;
+        }
+
+        return [
+            'subject' => $template['subject'] ?? null,
+            'body' => $template['body'] ?? null,
+            'recipients' => $template['recipients'] ?? [],
+            'model' => null
+        ];
+    }
+
     private function getMailParams($template)
     {
         if ($this->isApplicationHasDatabase()) {
-            $repository = new MailTemplateRepository(new TagerMailTemplate());
-
-            $templateModel = $repository->findByTemplate($template);
-            if (!$templateModel) {
-                throw new TagerMailInvalidTemplateException($template);
+            $result = $this->getMailParamsByDatabase($template);
+            if ($result) {
+                return $result;
             }
-
-            return [
-                'subject' => $templateModel->subject,
-                'body' => $templateModel->body,
-                'recipients' => $templateModel->recipients ? explode(',', $templateModel->recipients) : [],
-                'model' => $templateModel
-            ];
-        } else {
-            $template = $this->config()->getTemplate($template);
-            if (!$template) {
-                throw new TagerMailInvalidTemplateException($template);
-            }
-
-            return [
-                'subject' => $template['subject'] ?? null,
-                'body' => $template['body'] ?? null,
-                'recipients' => $template['recipients'] ?? [],
-                'model' => null
-            ];
         }
+
+        $result = $this->getMailParamsByConfig($template);
+
+        if (!$result) {
+            throw new TagerMailInvalidTemplateException($template);
+        }
+
+        return $result;
     }
 
     public function sendMailUsingTemplate($template, $templateValues = [], $to = null, ?TagerMailAttachments $attachments = null)
