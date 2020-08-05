@@ -16,7 +16,6 @@ class MailLogResource extends JsonResource
             'body' => $this->body,
             'status' => $this->status,
             'error' => $this->error,
-            'serviceResponse' => $this->serviceResponse,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at
         ];

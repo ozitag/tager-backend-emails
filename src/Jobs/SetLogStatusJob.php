@@ -13,14 +13,11 @@ class SetLogStatusJob extends Job
 
     private $error;
 
-    private $response;
-
-    public function __construct($logId, $status, $response, $error = null)
+    public function __construct($logId, $status, $error = null)
     {
         $this->logId = $logId;
         $this->status = $status;
         $this->error = $error;
-        $this->response = $response;
     }
 
     public function handle(MailLogRepository $repository)
@@ -37,7 +34,6 @@ class SetLogStatusJob extends Job
         $repository->fillAndSave([
             'status' => $this->status,
             'error' => $this->error,
-            'service_response' => $this->response
         ]);
     }
 }

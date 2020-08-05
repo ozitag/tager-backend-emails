@@ -17,7 +17,6 @@ class TagerEmailsUpdate extends Migration
             $table->string('template')->nullable();
             $table->text('body')->change();
             $table->dropColumn('debug');
-            $table->text('service_response')->nullable();
         });
     }
 
@@ -31,7 +30,6 @@ class TagerEmailsUpdate extends Migration
         Schema::table('tager_mail_logs', function (Blueprint $table) {
             $table->dropColumn('template');
             $table->boolean('debug')->default(false);
-            $table->dropColumn('service_response');
         });
     }
 }

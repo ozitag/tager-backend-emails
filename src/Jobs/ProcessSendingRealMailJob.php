@@ -34,9 +34,9 @@ class ProcessSendingRealMailJob extends QueueJob
         $this->attachments = $attachments;
     }
 
-    private function setLogStatus($status, $response = null, $error = null)
+    private function setLogStatus($status, $error = null)
     {
-        dispatch(new SetLogStatusJob($this->logId, $status, $response, $error));
+        dispatch(new SetLogStatusJob($this->logId, $status, $error));
     }
 
     /**
@@ -60,7 +60,7 @@ class ProcessSendingRealMailJob extends QueueJob
         try {
             $sender->send($this->to, $this->subject, $this->body, $this->attachments, ['logId' => $this->logId]);
         } catch (\Exception $exception) {
-            $this->setLogStatus(TagerMailStatus::Failure, null, $exception->getMessage());
+            $this->setLogStatus(TagerMailStatus::Failure, $exception->getMessage());
         }
     }
 }
