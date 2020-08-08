@@ -144,14 +144,16 @@ class TagerMailExecutor
 
         $templateInstance = $this->getTemplateInstance();
 
-        $subject = $body = $serviceTemplate = $serviceTemplateParams = null;
+        $body = $serviceTemplate = $serviceTemplateParams = null;
 
         if ($templateInstance->getServiceTemplate()) {
             $serviceTemplate = $templateInstance->getServiceTemplate();
+            $serviceTemplateParams = $this->templateFields;
         } else {
-            $subject = $this->getSubject();
             $body = $this->getBody();
         }
+
+        $subject = $this->getSubject();
 
         $this->logRepository->reset();
 
@@ -181,6 +183,7 @@ class TagerMailExecutor
             $this->getSubject(),
             $this->getBody(),
             $this->getTemplateInstance()->getServiceTemplate(),
+            $this->templateFields,
             $log->id,
             $this->attachments
         ));

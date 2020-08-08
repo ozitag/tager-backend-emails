@@ -2,14 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Mail;
 
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
-use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailInvalidTemplateException;
-use OZiTAG\Tager\Backend\Mail\Models\TagerMailLog;
-use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
-use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
-use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
-use OZiTAG\Tager\Backend\Mail\Jobs\ProcessSendingRealMailJob;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailExecutor;
 
 class TagerMail
@@ -43,7 +36,5 @@ class TagerMail
         }
 
         $this->executor->run();
-
-        return;
     }
 }

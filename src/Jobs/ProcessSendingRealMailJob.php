@@ -22,19 +22,23 @@ class ProcessSendingRealMailJob extends QueueJob
     /** @var string */
     private $serviceTemplate;
 
+    /** @var array */
+    private $templateFields;
+
     /** @var null|integer */
     private $logId;
 
     /** @var TagerMailAttachments|null */
     private $attachments = null;
 
-    public function __construct($to, $subject, $body, $serviceTemplate = null, $logId = null, ?TagerMailAttachments $attachments = null)
+    public function __construct($to, $subject, $body, $serviceTemplate = null, $templateFields = null, $logId = null, ?TagerMailAttachments $attachments = null)
     {
         $this->to = $to;
         $this->subject = $subject;
         $this->body = $body;
         $this->logId = $logId;
         $this->serviceTemplate = $serviceTemplate;
+        $this->templateFields = $templateFields;
         $this->attachments = $attachments;
     }
 
@@ -63,7 +67,7 @@ class ProcessSendingRealMailJob extends QueueJob
 
         try {
             if ($this->serviceTemplate) {
-                $sender->sendUsingServiceTemplate($this->to, $this->serviceTemplate, null, $this->attachments, $this->logId);
+                $sender->sendUsingServiceTemplate($this->to, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->logId);
             } else {
                 $sender->send($this->to, $this->subject, $this->body, $this->attachments, $this->logId);
             }

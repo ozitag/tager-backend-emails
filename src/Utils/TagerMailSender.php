@@ -27,11 +27,11 @@ class TagerMailSender
         }
     }
 
-    public function sendUsingServiceTemplate($to, $serviceTemplate, $serviceTemplateParams = null, ?TagerMailAttachments $attachments = null, $logId = null)
+    public function sendUsingServiceTemplate($to, $serviceTemplate, $serviceTemplateParams = null, $subject = null, ?TagerMailAttachments $attachments = null, $logId = null)
     {
         try {
             $service = TagerMailServiceFactory::create();
-            $service->sendUsingTemplate($to, $serviceTemplate, $serviceTemplateParams, $attachments, $logId);
+            $service->sendUsingTemplate($to, $serviceTemplate, $serviceTemplateParams, $subject, $attachments, $logId);
             dispatch(new SetLogStatusJob($logId, TagerMailStatus::Success));
         } catch (\Exception $exception) {
             throw new TagerMailSenderException($exception->getMessage());
