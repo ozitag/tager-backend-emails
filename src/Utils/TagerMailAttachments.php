@@ -14,18 +14,19 @@ class TagerMailAttachments
         return $this->items;
     }
 
-    public function add($path, $as = null, $mime = null)
+    public function add($path, $as = null, $mime = null, $url = null)
     {
         $this->items[] = [
             'path' => $path,
             'as' => $as,
-            'mime' => $mime
+            'mime' => $mime,
+            'url' => $url
         ];
     }
 
     public function addFile(File $file, $filename = null)
     {
-        $this->add($file->getPath(), $filename ? $filename : $file->name, $file->mime);
+        $this->add($file->getPath(), $filename ? $filename : $file->name, $file->mime, $file->getUrl());
     }
 
     /**

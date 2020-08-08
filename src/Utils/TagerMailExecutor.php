@@ -15,6 +15,7 @@ class TagerMailExecutor
 
     private $body;
 
+    /** @var TagerMailAttachments|null */
     private $attachments = null;
 
     private $template = null;
@@ -156,7 +157,6 @@ class TagerMailExecutor
         $subject = $this->getSubject();
 
         $this->logRepository->reset();
-
         return $this->logRepository->fillAndSave([
             'recipient' => $recipient,
             'subject' => $subject,
@@ -165,7 +165,8 @@ class TagerMailExecutor
             'template_id' => $templateInstance ? $templateInstance->getDatabaseId() : null,
             'template' => $templateInstance ? $templateInstance->getTemplateName() : null,
             'service_template' => $serviceTemplate,
-            'service_template_params' => $serviceTemplateParams ? json_encode($serviceTemplateParams) : null
+            'service_template_params' => $serviceTemplateParams ? json_encode($serviceTemplateParams) : null,
+            'attachments' => $this->attachments ? $this->attachments->getLogString() : null
         ]);
     }
 

@@ -1,11 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use OZiTAG\Tager\Backend\Mail\Controllers\AdminController;
+use OZiTAG\Tager\Backend\Mail\Controllers\AdminMailLogsController;
+use OZiTAG\Tager\Backend\Mail\Controllers\AdminMailTemplatesController;
+use OZiTAG\Tager\Backend\Mail\Controllers\AdminMailController;
 
-Route::group(['prefix' => 'admin', 'middleware' => ['passport:administrators', 'auth:api']], function () {
-    Route::get('/mail/logs', [AdminController::class, 'logs']);
-    Route::get('/mail/templates', [AdminController::class, 'templates']);
-    Route::get('/mail/templates/{id}', [AdminController::class, 'view']);
-    Route::put('/mail/templates/{id}', [AdminController::class, 'update']);
+Route::group(['prefix' => 'admin/mail', 'middleware' => ['provider:administrators', 'auth:api']], function () {
+    Route::get('/info', [AdminMailController::class, 'info']);
+    Route::get('/service-templates', [AdminMailController::class, 'serviceTemplates']);
+
+    Route::get('/logs', [AdminMailLogsController::class, 'index']);
+
+    Route::get('/templates', [AdminMailTemplatesController::class, 'index']);
+    Route::get('/templates/{id}', [AdminMailTemplatesController::class, 'view']);
+    Route::put('/templates/{id}', [AdminMailTemplatesController::class, 'update']);
 });

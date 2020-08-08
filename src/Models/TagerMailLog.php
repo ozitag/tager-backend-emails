@@ -21,6 +21,7 @@ class TagerMailLog extends Model
         'status',
         'template',
         'error',
+        'attachments',
         'service_template',
         'service_template_params',
     ];

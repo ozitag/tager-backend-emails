@@ -61,6 +61,10 @@ class MandrillService implements ITagerMailService
     {
         $result = [];
 
+        if (!$attachments) {
+            return [];
+        }
+
         foreach ($attachments->getItems() as $item) {
             $path = $item['path'];
             if (!is_file($path)) {
