@@ -13,12 +13,11 @@ class MandrillService implements ITagerMailService
         $this->apiKey = $apiKey;
     }
 
-    private function httpRequest($endpoint, $params)
+    private function httpRequest($endpoint, $params = [])
     {
         $params = array_merge(['key' => $this->apiKey], $params);
 
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -26,14 +25,20 @@ class MandrillService implements ITagerMailService
         curl_setopt($curl, CURLOPT_TIMEOUT, 600);
         curl_setopt($curl, CURLOPT_URL, 'https://mandrillapp.com/api/1.0/' . $endpoint . '.json');
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
+
         curl_setopt($curl, CURLOPT_VERBOSE, false);
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return $response;
+        return json_decode($response, true);
     }
 
+    /**
+     * @param array $templateParams
+     * @return array
+     */
     private function getTemplateContent($templateParams)
     {
         $templateContent = [];
@@ -48,6 +53,10 @@ class MandrillService implements ITagerMailService
         return $templateContent;
     }
 
+    /**
+     * @param TagerMailAttachments|null $attachments
+     * @return array
+     */
     private function getAttachments(?TagerMailAttachments $attachments)
     {
         $result = [];
@@ -72,6 +81,13 @@ class MandrillService implements ITagerMailService
         return $result;
     }
 
+    /**
+     * @param string $to
+     * @param string $template
+     * @param array|null $templateParams
+     * @param string|null $subject
+     * @param TagerMailAttachments|null $attachments
+     */
     public function sendUsingTemplate($to, $template, $templateParams = null, $subject = null, ?TagerMailAttachments $attachments = null)
     {
         $templateContent = [];
@@ -84,7 +100,7 @@ class MandrillService implements ITagerMailService
             }
         }
 
-        return $this->httpRequest('messages/send-template', [
+        $this->httpRequest('messages/send-template', [
             'template_name' => $template,
             'template_content' => $this->getTemplateContent($templateParams),
             'message' => [
@@ -100,5 +116,24 @@ class MandrillService implements ITagerMailService
                 'attachments' => $this->getAttachments($attachments)
             ]
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTemplates()
+    {
+        $items = $this->httpRequest('templates/list');
+
+        $result = [];
+
+        foreach ($items as $item) {
+            $result[] = [
+                'value' => $item['slug'],
+                'label' => $item['name']
+            ];
+        }
+
+        return $result;
     }
 }

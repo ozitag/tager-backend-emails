@@ -3,25 +3,13 @@
 namespace OZiTAG\Tager\Backend\Mail\Controllers;
 
 use OZiTAG\Tager\Backend\Core\Controllers\Controller;
-use OZiTAG\Tager\Backend\Mail\Features\InfoFeature;
-use OZiTAG\Tager\Backend\Mail\Features\ListMailLogsFeature;
 use OZiTAG\Tager\Backend\Mail\Features\ListMailTemplatesFeature;
 use OZiTAG\Tager\Backend\Mail\Features\UpdateMailTemplateFeature;
 use OZiTAG\Tager\Backend\Mail\Features\ViewMailTemplateFeature;
 
-class AdminController extends Controller
+class AdminMailTemplatesController extends Controller
 {
-    public function info()
-    {
-        return $this->serve(InfoFeature::class);
-    }
-
-    public function logs()
-    {
-        return $this->serve(ListMailLogsFeature::class);
-    }
-
-    public function templates()
+    public function index()
     {
         return $this->serve(ListMailTemplatesFeature::class);
     }

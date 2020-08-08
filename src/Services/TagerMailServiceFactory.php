@@ -24,6 +24,6 @@ class TagerMailServiceFactory
             return new MandrillService($apiKey);
         }
 
-        throw new TagerMailInvalidServiceConfigException('Invalid Mail Service "' . $mailer . '"');
+        return null;
     }
 }
