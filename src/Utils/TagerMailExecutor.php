@@ -136,10 +136,21 @@ class TagerMailExecutor
         return $this->prepareBody($result, $this->templateFields);
     }
 
-    private function createLogItem($recipient, $subject, $body, $status = TagerMailStatus::Created)
+    private function createLogItem($recipient, $status = TagerMailStatus::Created)
     {
         if (TagerMailConfig::hasDatabase() == false) {
             return null;
+        }
+
+        $templateInstance = $this->getTemplateInstance();
+
+        $subject = $body = $serviceTemplate = $serviceTemplateParams = null;
+
+        if ($templateInstance->getServiceTemplate()) {
+            $serviceTemplate = $templateInstance->getServiceTemplate();
+        } else {
+            $subject = $this->getSubject();
+            $body = $this->getBody();
         }
 
         $this->logRepository->reset();
@@ -149,42 +160,49 @@ class TagerMailExecutor
             'subject' => $subject,
             'body' => $body,
             'status' => $status,
-            'template_id' => $this->getTemplateInstance()->getDatabaseId(),
-            'template' => $this->getTemplateInstance()->getTemplateName()
+            'template_id' => $templateInstance ? $templateInstance->getDatabaseId() : null,
+            'template' => $templateInstance ? $templateInstance->getTemplateName() : null,
+            'service_template' => $serviceTemplate,
+            'service_template_params' => $serviceTemplateParams ? json_encode($serviceTemplateParams) : null
         ]);
     }
 
-    private function send($recipient, $subject, $body)
+    private function send($recipient)
     {
         if (TagerMailConfig::isDisabled()) {
-            $this->createLogItem($recipient, $subject, $body, TagerMailStatus::Disabled);
+            $this->createLogItem($recipient, TagerMailStatus::Disabled);
             return;
         }
 
-        $log = $this->createLogItem($recipient, $subject, $body, TagerMailStatus::Created);
+        $log = $this->createLogItem($recipient, TagerMailStatus::Created);
 
         dispatch(new ProcessSendingRealMailJob(
             $recipient,
-            $subject,
-            $body,
+            $this->getSubject(),
+            $this->getBody(),
+            $this->getTemplateInstance()->getServiceTemplate(),
             $log->id,
             $this->attachments
         ));
     }
 
+    private function validate()
+    {
+        if ($this->getTemplateInstance() == null || $this->getTemplateInstance()->getServiceTemplate() == null) {
+            $subject = $this->getSubject();
+            if (empty($subject)) {
+                throw new TagerMailInvalidMessageException('Subject is empty');
+            }
+        }
+    }
+
     public function run()
     {
-        $subject = $this->getSubject();
-        if (empty($subject)) {
-            throw new TagerMailInvalidMessageException('Subject is empty');
-        }
-
-        $body = $this->getBody();
+        $this->validate();
 
         $recipients = $this->getRecipients();
-
         foreach ($recipients as $recipient) {
-            $this->send($recipient, $subject, $body);
+            $this->send($recipient);
         }
     }
 }

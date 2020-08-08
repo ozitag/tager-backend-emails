@@ -24,6 +24,7 @@ class FlushMailTemplatesCommand extends Command
     public function handle(MailTemplateRepository $repository)
     {
         $templates = config()->get('tager-mail.templates');
+
         if (!$templates) {
             return;
         }
@@ -47,6 +48,8 @@ class FlushMailTemplatesCommand extends Command
 
                 $model->subject = $data['subject'] ?? '';
                 $model->body = $data['body'] ?? '';
+
+                $model->service_template = $data['serviceTemplate'] ?? null;
             }
 
             $model->name = $data['name'];

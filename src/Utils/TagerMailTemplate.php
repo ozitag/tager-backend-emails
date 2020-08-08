@@ -14,6 +14,8 @@ class TagerMailTemplate
 
     private $databaseId = null;
 
+    private $serviceTemplate = null;
+
     public function setBody($value)
     {
         $this->body = $value;
@@ -29,10 +31,16 @@ class TagerMailTemplate
         $this->recipients = $value;
     }
 
-    public function setTemplate($template, $databaseId = null)
+    public function setTemplate($template, $databaseId = null, $serviceTemplate = null)
     {
         $this->template = $template;
         $this->databaseId = $databaseId;
+        $this->serviceTemplate = $serviceTemplate;
+    }
+
+    public function getServiceTemplate()
+    {
+        return $this->serviceTemplate;
     }
 
     public function getSubject()

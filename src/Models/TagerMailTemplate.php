@@ -20,6 +20,9 @@ class TagerMailTemplate extends Model
         'name',
         'value',
         'subject',
-        'recipients'
+        'recipients',
+        'body',
+        'template',
+        'service_template',
     ];
 }
