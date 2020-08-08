@@ -25,7 +25,8 @@ class UpdateMailTemplateFeature extends Feature
 
         $model->subject = $request->subject;
         $model->body = $request->body;
-        $model->recipients = implode(',', $request->recipients);
+        $model->service_template = $request->serviceTemplate;
+        $model->recipients = $request->recipients ? implode(',', $request->recipients) : null;
         $model->changed_by_admin = true;
         $model->save();
 

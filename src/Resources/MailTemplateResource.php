@@ -21,6 +21,7 @@ class MailTemplateResource extends JsonResource
             'id' => $this->id,
             'alias' => (string)$this->template,
             'name' => (string)$this->name,
+            'serviceTemplate' => $this->service_template,
             'subject' => (string)$this->subject,
             'body' => (string)$this->body,
             'recipients' => $this->recipients ? explode(',', $this->recipients) : [],

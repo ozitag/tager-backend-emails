@@ -3,6 +3,7 @@
 namespace OZiTAG\Tager\Backend\Mail\Services;
 
 use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailInvalidServiceConfigException;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 
 class TagerMailServiceFactory
 {
@@ -11,10 +12,10 @@ class TagerMailServiceFactory
      */
     public static function create()
     {
-        $mailer = config('mail.default');
+        $mailer = TagerMailConfig::getService();
 
         if ($mailer == 'mandrill') {
-            $apiKey = config('services.mandrill.secret');
+            $apiKey = TagerMailConfig::getMandrillSecret();
 
             if (empty($apiKey)) {
                 throw new TagerMailInvalidServiceConfigException('Secret for Mandrill is not set');

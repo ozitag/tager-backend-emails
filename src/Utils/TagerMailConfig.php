@@ -62,6 +62,22 @@ class TagerMailConfig
     }
 
     /**
+     * @return string
+     */
+    public static function getService()
+    {
+        return (string)config('mail.default');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getMandrillSecret()
+    {
+        return config('services.mandrill.secret');
+    }
+
+    /**
      * @return array|string
      */
     public static function getAllowedEmails()
