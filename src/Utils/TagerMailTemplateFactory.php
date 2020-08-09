@@ -20,6 +20,9 @@ class TagerMailTemplateFactory
     private function getTemplateFromConfig($template)
     {
         $configTemplate = TagerMailConfig::getTemplate($template);
+        if(!$configTemplate){
+            return null;
+        }
 
         $result = new TagerMailTemplate();
 

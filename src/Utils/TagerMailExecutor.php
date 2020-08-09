@@ -58,6 +58,11 @@ class TagerMailExecutor
     {
         $this->template = $template;
         $this->templateFields = $templateFields;
+
+        $template = $this->templateFactory->getTemplate($this->template);
+        if (!$template) {
+            throw new TagerMailInvalidMessageException('Template not found');
+        }
     }
 
     /**
@@ -79,7 +84,7 @@ class TagerMailExecutor
         return [$this->recipients];
     }
 
-    private function prepareSubject($subject)
+    private function prepareSubject($subject, $templateFields = [])
     {
         $subjectTemplate = TagerMailConfig::getSubjectTemplate();
 
@@ -87,7 +92,15 @@ class TagerMailExecutor
             return $this->subject;
         }
 
-        return \str_replace('{subject}', $subject, $subjectTemplate);
+        $result = \str_replace('{subject}', $subject, $subjectTemplate);
+
+        if (is_array($templateFields)) {
+            foreach ($templateFields as $param => $value) {
+                $result = str_replace('{{' . $param . '}}', $value, $result);
+            }
+        }
+
+        return $result;
     }
 
     private function prepareBody($body, $templateFields = [])
@@ -123,7 +136,7 @@ class TagerMailExecutor
             $result = $this->getTemplateInstance()->getSubject();
         }
 
-        return $this->prepareSubject($result);
+        return $this->prepareSubject($result, $this->templateFields);
     }
 
     private function getBody()
