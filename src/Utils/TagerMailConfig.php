@@ -83,6 +83,7 @@ class TagerMailConfig
     public static function getAllowedEmails()
     {
         $value = config('tager-mail.allow_emails');
+
         if (is_null($value)) {
             return '*';
         }

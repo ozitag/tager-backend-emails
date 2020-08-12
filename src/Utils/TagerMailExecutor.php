@@ -120,6 +120,10 @@ class TagerMailExecutor
      */
     private function getTemplateInstance()
     {
+        if (!$this->template) {
+            return null;
+        }
+
         $template = $this->templateFactory->getTemplate($this->template);
         if (!$template) {
             throw new TagerMailInvalidMessageException('Template not found');
@@ -160,7 +164,7 @@ class TagerMailExecutor
 
         $body = $serviceTemplate = $serviceTemplateParams = null;
 
-        if ($templateInstance->getServiceTemplate()) {
+        if ($templateInstance && $templateInstance->getServiceTemplate()) {
             $serviceTemplate = $templateInstance->getServiceTemplate();
             $serviceTemplateParams = $this->templateFields;
         } else {
@@ -196,7 +200,7 @@ class TagerMailExecutor
             $recipient,
             $this->getSubject(),
             $this->getBody(),
-            $this->getTemplateInstance()->getServiceTemplate(),
+            $this->template ? $this->getTemplateInstance()->getServiceTemplate() : null,
             $this->templateFields,
             $log->id,
             $this->attachments
