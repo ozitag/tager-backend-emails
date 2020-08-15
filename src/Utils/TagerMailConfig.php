@@ -84,7 +84,7 @@ class TagerMailConfig
     {
         $value = config('tager-mail.allow_emails');
 
-        if (is_null($value)) {
+        if (is_null($value) || $value == '*') {
             return '*';
         }
 
