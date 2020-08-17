@@ -11,9 +11,9 @@ class UpdateTemplateRequest extends FormRequest
         return [
             'recipients' => 'nullable',
             'recipients.*' => 'email',
-            'subject' => 'required|string',
-            'body' => 'string',
-            'serviceTemplate' => 'string',
+            'subject' => 'nullable|string',
+            'body' => 'nullable|string',
+            'serviceTemplate' => 'nullable|string',
         ];
     }
 }
