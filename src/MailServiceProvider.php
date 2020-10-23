@@ -6,9 +6,9 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Mail\Events\MessageSent;
 use OZiTAG\Tager\Backend\Mail\Console\FlushMailTemplatesCommand;
 use OZiTAG\Tager\Backend\Mail\Console\ResendSkipMailCommand;
+use OZiTAG\Tager\Backend\Mail\Enums\MailScope;
 use OZiTAG\Tager\Backend\Mail\Events\MessageSentHandler;
 use OZiTAG\Tager\Backend\Rbac\TagerScopes;
-use OZiTAG\Tager\Backend\Sms\Enums\SmsScope;
 
 class MailServiceProvider extends EventServiceProvider
 {
@@ -53,9 +53,9 @@ class MailServiceProvider extends EventServiceProvider
         }
 
         TagerScopes::registerGroup('Mail', [
-            SmsScope::EditTemplates => 'Edit templates',
-            SmsScope::ViewTemplates => 'View templates',
-            SmsScope::ViewLogs => 'View logs',
+            MailScope::EditTemplates => 'Edit templates',
+            MailScope::ViewTemplates => 'View templates',
+            MailScope::ViewLogs => 'View logs',
         ]);
 
         parent::boot();
