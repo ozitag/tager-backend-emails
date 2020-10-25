@@ -15,6 +15,12 @@ class TagerMail
         $this->executor = $executor;
     }
 
+    /**
+     * @param string[] $recipients
+     * @param string $subject
+     * @param string $body
+     * @param TagerMailAttachments|null $attachments
+     */
     public function sendMail($recipients, $subject, $body, ?TagerMailAttachments $attachments = null)
     {
         $this->executor->setRecipients($recipients);
@@ -25,6 +31,13 @@ class TagerMail
         $this->executor->run();
     }
 
+    /**
+     * @param string $template
+     * @param string[] $templateValues
+     * @param string[]|null $recipients
+     * @param TagerMailAttachments|null $attachments
+     * @throws Exceptions\TagerMailInvalidMessageException
+     */
     public function sendMailUsingTemplate($template, $templateValues = [], $recipients = null, ?TagerMailAttachments $attachments = null)
     {
         $this->executor->setRecipients($recipients);

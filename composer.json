@@ -14,7 +14,9 @@
   "require": {
     "ozitag/tager-backend-core": "^1.4",
     "ozitag/tager-backend-rbac": "^1.0",
-    "ozerich/laravel-filestorage-db": "^0.3"
+    "ozerich/laravel-filestorage-db": "^0.3",
+    "ext-curl": "*",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
