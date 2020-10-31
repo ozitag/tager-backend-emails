@@ -2,29 +2,45 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Controllers;
 
-use OZiTAG\Tager\Backend\Core\Controllers\Controller;
-use OZiTAG\Tager\Backend\Mail\Features\ListMailTemplatesFeature;
-use OZiTAG\Tager\Backend\Mail\Features\UpdateMailTemplateFeature;
-use OZiTAG\Tager\Backend\Mail\Features\ViewMailTemplateFeature;
+use OZiTAG\Tager\Backend\Crud\Actions\StoreOrUpdateAction;
+use OZiTAG\Tager\Backend\Crud\Controllers\AdminCrudController;
+use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
+use OZiTAG\Tager\Backend\Mail\Requests\UpdateTemplateRequest;
+use OZiTAG\Tager\Backend\Mail\Jobs\UpdateTemplateJob;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 
-class AdminMailTemplatesController extends Controller
+class AdminMailTemplatesController extends AdminCrudController
 {
-    public function index()
-    {
-        return $this->serve(ListMailTemplatesFeature::class);
-    }
+    protected $hasIndexAction = true;
 
-    public function view($id)
-    {
-        return $this->serve(ViewMailTemplateFeature::class, [
-            'id' => $id
-        ]);
-    }
+    protected $hasViewAction = true;
 
-    public function update($id)
+    protected $hasStoreAction = false;
+
+    protected $hasUpdateAction = true;
+
+    protected $hasDeleteAction = false;
+
+    protected $hasMoveAction = false;
+
+    public function __construct(MailTemplateRepository $repository)
     {
-        return $this->serve(UpdateMailTemplateFeature::class, [
-            'id' => $id
-        ]);
+        parent::__construct($repository);
+
+        $this->setResourceFields([
+            'id',
+            'alias' => 'template',
+            'name',
+            'serviceTemplate' => 'service_template',
+            'subject', 'body',
+            'recipients' => function ($model) {
+                return $model->recipients ? explode(',', $model->recipients) : [];
+            },
+            'variables' => function ($model) {
+                (new TagerMailConfig())->getTemplateVariables($model->template);
+            }
+        ], true);
+
+        $this->setUpdateAction(new StoreOrUpdateAction(UpdateTemplateRequest::class, UpdateTemplateJob::class));
     }
 }

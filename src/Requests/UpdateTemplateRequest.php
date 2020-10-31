@@ -2,9 +2,9 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Requests;
 
-use OZiTAG\Tager\Backend\Core\Http\FormRequest;
+use OZiTAG\Tager\Backend\Crud\Requests\CrudFormRequest;
 
-class UpdateTemplateRequest extends FormRequest
+class UpdateTemplateRequest extends CrudFormRequest
 {
     public function rules()
     {
