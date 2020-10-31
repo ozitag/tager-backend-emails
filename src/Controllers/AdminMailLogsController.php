@@ -28,6 +28,7 @@ class AdminMailLogsController extends AdminCrudController
             'id', 'template',
             'serviceTemplate' => 'service_template',
             'recipient',
+            'subject',
             'body' => function ($model) {
                 return $model->body ?? $model->service_template_params;
             },
@@ -51,6 +52,6 @@ class AdminMailLogsController extends AdminCrudController
             'updatedAt' => 'created_at:datetime',
         ]);
 
-        $this->setIndexAction((new IndexAction())->enablePagination());
+        $this->setIndexAction((new IndexAction())->enablePagination()->enableSearchByQuery());
     }
 }
