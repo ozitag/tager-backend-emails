@@ -37,7 +37,7 @@ class AdminMailTemplatesController extends AdminCrudController
                 return $model->recipients ? explode(',', $model->recipients) : [];
             },
             'variables' => function ($model) {
-                (new TagerMailConfig())->getTemplateVariables($model->template);
+                return (new TagerMailConfig())->getTemplateVariables($model->template);
             }
         ], true);
 
