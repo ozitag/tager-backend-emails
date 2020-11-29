@@ -28,6 +28,8 @@ class MailServiceProvider extends EventServiceProvider
         $this->app->bind('tager-mail', function () {
             return new TagerMail();
         });
+
+        parent::register();
     }
 
     /**
