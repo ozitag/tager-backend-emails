@@ -8,17 +8,17 @@ use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 
 class AdminMailLogsController extends AdminCrudController
 {
-    protected $hasIndexAction = true;
+    protected bool $hasIndexAction = true;
 
-    protected $hasViewAction = false;
+    protected bool $hasViewAction = false;
 
-    protected $hasStoreAction = false;
+    protected bool $hasStoreAction = false;
 
-    protected $hasUpdateAction = false;
+    protected bool $hasUpdateAction = false;
 
-    protected $hasDeleteAction = false;
+    protected bool $hasDeleteAction = false;
 
-    protected $hasMoveAction = false;
+    protected bool $hasMoveAction = false;
 
     public function __construct(MailLogRepository $repository)
     {
