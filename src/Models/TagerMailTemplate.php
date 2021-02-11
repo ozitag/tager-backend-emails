@@ -24,5 +24,6 @@ class TagerMailTemplate extends Model
         'body',
         'template',
         'service_template',
+        'changed_by_admin'
     ];
 }
