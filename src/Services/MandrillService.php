@@ -85,25 +85,8 @@ class MandrillService implements ITagerMailService
         return $result;
     }
 
-    /**
-     * @param string $to
-     * @param string $template
-     * @param array|null $templateParams
-     * @param string|null $subject
-     * @param TagerMailAttachments|null $attachments
-     */
-    public function sendUsingTemplate($to, $template, $templateParams = null, $subject = null, ?TagerMailAttachments $attachments = null)
+    public function sendUsingTemplate(string $to, string $template, ?array $templateParams = null, ?string $subject = null, ?TagerMailAttachments $attachments = null, ?string $fromEmail = null, ?string $fromName = null)
     {
-        $templateContent = [];
-        if (is_array($templateParams)) {
-            foreach ($templateParams as $param => $value) {
-                $templateContent[] = [
-                    'name' => $param,
-                    'content' => $value
-                ];
-            }
-        }
-
         $this->httpRequest('messages/send-template', [
             'template_name' => $template,
             'template_content' => $this->getTemplateContent($templateParams),
@@ -113,6 +96,8 @@ class MandrillService implements ITagerMailService
                         'email' => $to
                     ]
                 ],
+                'from_email' => $fromEmail,
+                'from_name' => $fromName,
                 'subject' => $subject,
                 'merge' => true,
                 'merge_language' => 'handlebars',

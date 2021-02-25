@@ -18,6 +18,8 @@ class TagerMailLog extends Model
         'recipient',
         'subject',
         'body',
+        'from_email',
+        'from_name',
         'status',
         'template',
         'error',

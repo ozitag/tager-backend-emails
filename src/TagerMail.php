@@ -7,12 +7,24 @@ use OZiTAG\Tager\Backend\Mail\Utils\TagerMailExecutor;
 
 class TagerMail
 {
-    /** @var TagerMailExecutor */
-    private $executor;
+    private TagerMailExecutor $executor;
+
+    private ?string $fromEmail = null;
+
+    private ?string $fromName = null;
 
     public function __construct(TagerMailExecutor $executor)
     {
         $this->executor = $executor;
+    }
+
+    public function setFrom(string $fromEmail, string $fromName)
+    {
+        $this->fromEmail = $fromEmail;
+
+        $this->fromName = $fromName;
+
+        return $this;
     }
 
     /**
@@ -27,6 +39,10 @@ class TagerMail
         $this->executor->setSubject($subject);
         $this->executor->setBody($body);
         $this->executor->setAttachments($attachments);
+
+        if ($this->fromEmail) {
+            $this->executor->setFrom($this->fromEmail, $this->fromName);
+        }
 
         $this->executor->run();
     }
@@ -43,6 +59,10 @@ class TagerMail
         $this->executor->setRecipients($recipients);
         $this->executor->setAttachments($attachments);
         $this->executor->setTemplate($template, $templateValues);
+
+        if ($this->fromEmail) {
+            $this->executor->setFrom($this->fromEmail, $this->fromName);
+        }
 
         if ($recipients) {
             $this->executor->setRecipients($recipients);

@@ -31,7 +31,11 @@ class ProcessSendingRealMailJob extends QueueJob
     /** @var TagerMailAttachments|null */
     private $attachments = null;
 
-    public function __construct($to, $subject, $body, $serviceTemplate = null, $templateFields = null, $logId = null, ?TagerMailAttachments $attachments = null)
+    private ?string $fromName;
+
+    private ?string $fromEmail;
+
+    public function __construct($to, $subject, $body, $serviceTemplate = null, $templateFields = null, $logId = null, ?TagerMailAttachments $attachments = null, ?string $fromEmail = null, ?string $fromName = null)
     {
         $this->to = $to;
         $this->subject = $subject;
@@ -40,6 +44,9 @@ class ProcessSendingRealMailJob extends QueueJob
         $this->serviceTemplate = $serviceTemplate;
         $this->templateFields = $templateFields;
         $this->attachments = $attachments;
+
+        $this->fromName = $fromName;
+        $this->fromEmail = $fromEmail;
     }
 
     private function setLogStatus($status, $error = null)
@@ -67,9 +74,9 @@ class ProcessSendingRealMailJob extends QueueJob
 
         try {
             if ($this->serviceTemplate) {
-                $sender->sendUsingServiceTemplate($this->to, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->logId);
+                $sender->sendUsingServiceTemplate($this->to, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             } else {
-                $sender->send($this->to, $this->subject, $this->body, $this->attachments, $this->logId);
+                $sender->send($this->to, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             }
 
         } catch (\Exception $exception) {

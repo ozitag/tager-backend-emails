@@ -15,6 +15,10 @@ class TagerMailExecutor
 
     private $body;
 
+    private string $fromEmail;
+
+    private string $fromName;
+
     /** @var TagerMailAttachments|null */
     private $attachments = null;
 
@@ -52,6 +56,13 @@ class TagerMailExecutor
     public function setAttachments(?TagerMailAttachments $attachments = null)
     {
         $this->attachments = $attachments;
+    }
+
+    public function setFrom(string $fromEmail, string $fromName)
+    {
+        $this->fromEmail = $fromEmail;
+
+        $this->fromName = $fromName;
     }
 
     public function setTemplate($template, $templateFields)
@@ -178,6 +189,8 @@ class TagerMailExecutor
             'recipient' => $recipient,
             'subject' => $subject,
             'body' => $body,
+            'from_email' => $this->fromEmail,
+            'from_name' => $this->fromName,
             'status' => $status,
             'template_id' => $templateInstance ? $templateInstance->getDatabaseId() : null,
             'template' => $templateInstance ? $templateInstance->getTemplateName() : null,
@@ -203,7 +216,9 @@ class TagerMailExecutor
             $this->template ? $this->getTemplateInstance()->getServiceTemplate() : null,
             $this->templateFields,
             $log->id,
-            $this->attachments
+            $this->attachments,
+            $this->fromEmail,
+            $this->fromName
         ));
     }
 

@@ -32,6 +32,8 @@ class AdminMailLogsController extends AdminCrudController
             'body' => function ($model) {
                 return $model->body ?? $model->service_template_params;
             },
+            'fromEmail' => 'from_email',
+            'fromName' => 'from_name',
             'status', 'error',
             'attachments' => function ($model) {
                 $attachments = [];
