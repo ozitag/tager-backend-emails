@@ -9,33 +9,35 @@ use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 
 class TagerMailExecutor
 {
-    private $recipients = [];
+    private array $recipients = [];
 
-    private $subject;
+    private ?string $subject = null;
 
-    private $body;
+    private ?string $body = null;
 
     private ?string $fromEmail = null;
 
     private ?string $fromName = null;
 
-    /** @var TagerMailAttachments|null */
-    private $attachments = null;
+    private ?TagerMailAttachments $attachments = null;
 
-    private $template = null;
+    private ?string $template = null;
 
-    private $templateFields = [];
+    private array $templateFields = [];
 
-    /** @var TagerMailTemplateFactory */
-    private $templateFactory;
+    private TagerMailTemplateFactory $templateFactory;
 
-    /** @var MailLogRepository */
-    private $logRepository;
+    private MailLogRepository $logRepository;
 
     public function __construct(TagerMailTemplateFactory $templateFactory, MailLogRepository $mailLogRepository)
     {
         $this->templateFactory = $templateFactory;
+
         $this->logRepository = $mailLogRepository;
+
+        $this->fromName = config('mail.from.name');
+
+        $this->fromEmail = config('mail.from.address');
     }
 
     public function setRecipients($recipients)
