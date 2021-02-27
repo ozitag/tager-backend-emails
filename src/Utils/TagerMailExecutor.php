@@ -9,7 +9,7 @@ use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 
 class TagerMailExecutor
 {
-    private array $recipients = [];
+    private ?array $recipients = null;
 
     private ?string $subject = null;
 
