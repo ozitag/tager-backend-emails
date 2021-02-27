@@ -15,9 +15,9 @@ class TagerMailExecutor
 
     private $body;
 
-    private string $fromEmail;
+    private ?string $fromEmail = null;
 
-    private string $fromName;
+    private ?string $fromName = null;
 
     /** @var TagerMailAttachments|null */
     private $attachments = null;
