@@ -42,7 +42,7 @@ class TagerMailExecutor
 
     public function setRecipients($recipients)
     {
-        $this->recipients = $recipients;
+        $this->recipients = is_array($recipients) ? $recipients : (is_null($recipients) ? $recipients : [$recipients]);
     }
 
     public function setSubject($value)
