@@ -15,7 +15,6 @@
     "ozitag/tager-backend-core": "^1.5",
     "ozitag/tager-backend-rbac": "^1.0",
     "ozitag/tager-backend-crud": "^1.3",
-    "ozerich/laravel-filestorage-db": "^0.3",
     "guzzlehttp/guzzle": "^7.2.0",
     "ext-curl": "*",
     "ext-json": "*"
