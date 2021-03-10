@@ -26,8 +26,10 @@ class FlushMailTemplatesCommand extends Command
         $templates = config()->get('tager-mail.templates');
 
         if (!$templates) {
-            return;
+            $templates = [];
         }
+
+        $added = [];
 
         foreach ($templates as $template => $data) {
             $model = $repository->findByTemplate($template);
@@ -54,6 +56,10 @@ class FlushMailTemplatesCommand extends Command
 
             $model->name = $data['name'];
             $model->save();
+
+            $added[] = $template;
         }
+
+        $repository->builder()->whereNotIn('template', $added)->delete();
     }
 }
