@@ -79,7 +79,7 @@ class ProcessSendingRealMailJob extends QueueJob
                 $sender->send($this->to, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             }
 
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->setLogStatus(TagerMailStatus::Failure, $exception->getMessage());
         }
     }
