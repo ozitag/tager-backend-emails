@@ -29,7 +29,7 @@ class TransportFactory
     public static function sendgrid(array $config): SendGridTransport
     {
         $email = new Mail();
-        $sendgrid = new SendGrid($config['key']);
+        $sendgrid = new SendGrid($config['api_key']);
 
         return new SendGridTransport($email, $sendgrid);
     }
