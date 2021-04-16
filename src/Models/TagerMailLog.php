@@ -2,11 +2,30 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use OZiTAG\Tager\Backend\Core\Models\TModel;
 
-class TagerMailLog extends Model
+/**
+ * Class TagerMailLog
+ * @package OZiTAG\Tager\Backend\Mail\Models
+ *
+ * @property int $template_id
+ * @property string $recipient
+ * @property string $subject
+ * @property string $body
+ * @property string $from_email
+ * @property string $from_name
+ * @property string $status
+ * @property string $template
+ * @property string $error
+ * @property string $service_template
+ * @property string $service_template_params
+ *
+ */
+class TagerMailLog extends TModel
 {
     protected $table = 'tager_mail_logs';
+
+    static $defaultOrder = 'created_at desc';
 
     /**
      * The attributes that are mass assignable.
@@ -31,14 +50,5 @@ class TagerMailLog extends Model
     public function template()
     {
         return $this->belongsTo(TagerMailTemplate::class, );
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('order', function ($builder) {
-            $builder->orderBy('created_at', 'desc');
-        });
     }
 }

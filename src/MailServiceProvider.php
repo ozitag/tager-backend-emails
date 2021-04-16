@@ -34,6 +34,7 @@ class MailServiceProvider extends EventServiceProvider
     {
         $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
 
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'tager-mail');
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->publishes([
@@ -47,10 +48,10 @@ class MailServiceProvider extends EventServiceProvider
             ]);
         }
 
-        TagerScopes::registerGroup('Mail', [
-            MailScope::EditTemplates => 'Edit templates',
-            MailScope::ViewTemplates => 'View templates',
-            MailScope::ViewLogs => 'View logs',
+        TagerScopes::registerGroup(__('tager-mail::scopes.group'), [
+            MailScope::ViewTemplates => __('tager-mail::scopes.view_templates'),
+            MailScope::EditTemplates => __('tager-mail::scopes.edit_templates'),
+            MailScope::ViewLogs => __('tager-mail::scopes.view_logs')
         ]);
 
         $this->app['mail.manager']->extend('mandrill', function () {
