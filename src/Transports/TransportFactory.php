@@ -4,13 +4,12 @@ namespace OZiTAG\Tager\Backend\Mail\Transports;
 
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Arr;
-use SendGrid;
-use SendGrid\Mail\Mail;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Configuration;
 use SendinBlue\Client\Model\SendSmtpEmail;
 use Sendpulse\RestApi\ApiClient;
 use Sendpulse\RestApi\Storage\FileStorage;
+use Sichikawa\LaravelSendgridDriver\Transport\SendgridTransport;
 
 class TransportFactory
 {
@@ -26,12 +25,12 @@ class TransportFactory
         return new MandrillTransport(self::httpClient($config), $config['secret']);
     }
 
-    public static function sendgrid(array $config): SendGridTransport
+    public static function sendgrid(array $config): SendgridTransport
     {
-        $email = new Mail();
-        $sendgrid = new SendGrid($config['api_key']);
+        $client = new HttpClient(Arr::get($config, 'guzzle', []));
+        $endpoint = isset($config['endpoint']) ? $config['endpoint'] : null;
 
-        return new SendGridTransport($email, $sendgrid);
+        return new SendgridTransport($client, $config['api_key'], $endpoint);
     }
 
     public static function sendinblue(array $config): SendinblueTransport
