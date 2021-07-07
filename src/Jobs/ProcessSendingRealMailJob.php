@@ -2,6 +2,8 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Jobs;
 
+use Illuminate\Mail\Transport\MailgunTransport;
+use Illuminate\Support\Facades\Mail;
 use OZiTAG\Tager\Backend\Core\Jobs\QueueJob;
 use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
@@ -71,6 +73,13 @@ class ProcessSendingRealMailJob extends QueueJob
         }
 
         $this->setLogStatus(TagerMailStatus::Sending);
+
+        if (Mail::getSwiftMailer()->getTransport() instanceof MailgunTransport) {
+            if (empty(config('services.mailgun.domain'))) {
+                $this->setLogStatus(TagerMailStatus::Failure, 'Mailgun domain is empty');
+                return;
+            }
+        }
 
         try {
             if ($this->serviceTemplate) {
