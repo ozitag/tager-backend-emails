@@ -19,6 +19,8 @@ class TagerMailExecutor
 
     private ?string $fromName = null;
 
+    private bool $fromConfiguredManual = false;
+
     private ?TagerMailAttachments $attachments = null;
 
     private ?string $template = null;
@@ -60,11 +62,13 @@ class TagerMailExecutor
         $this->attachments = $attachments;
     }
 
-    public function setFrom(string $fromEmail, string $fromName)
+    public function setFrom(?string $fromEmail, ?string $fromName)
     {
         $this->fromEmail = $fromEmail;
 
         $this->fromName = $fromName;
+
+        $this->fromConfiguredManual = true;
     }
 
     public function setTemplate($template, $templateFields)
@@ -75,6 +79,10 @@ class TagerMailExecutor
         $template = $this->templateFactory->getTemplate($this->template);
         if (!$template) {
             throw new TagerMailInvalidMessageException('Template not found');
+        }
+
+        if ($this->fromConfiguredManual == false && (!empty($template->getFromEmail()) || !empty($template->getFromName()))) {
+            $this->setFrom($template->getFromEmail(), $template->getFromName());
         }
     }
 

@@ -58,11 +58,12 @@ class TagerMail
     {
         $this->executor->setRecipients($recipients);
         $this->executor->setAttachments($attachments);
-        $this->executor->setTemplate($template, $templateValues);
 
         if ($this->fromEmail) {
             $this->executor->setFrom($this->fromEmail, $this->fromName);
         }
+
+        $this->executor->setTemplate($template, $templateValues);
 
         if ($recipients) {
             $this->executor->setRecipients($recipients);

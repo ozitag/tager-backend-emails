@@ -35,7 +35,9 @@ class UpdateTemplateJob extends Job
             'body' => $this->request->body,
             'service_template' => $this->request->serviceTemplate,
             'recipients' => $this->request->recipients ? implode(',', $this->request->recipients) : null,
-            'changed_by_admin' => true
+            'changed_by_admin' => true,
+            'from_name' => $this->request->fromName,
+            'from_email' => $this->request->fromEmail,
         ]);
     }
 }

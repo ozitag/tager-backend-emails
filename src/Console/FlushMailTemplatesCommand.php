@@ -3,6 +3,7 @@
 namespace OZiTAG\Tager\Backend\Mail\Console;
 
 use Illuminate\Console\Command;
+use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
 
 class FlushMailTemplatesCommand extends Command
@@ -32,6 +33,7 @@ class FlushMailTemplatesCommand extends Command
         $added = [];
 
         foreach ($templates as $template => $data) {
+            /** @var TagerMailTemplate $model */
             $model = $repository->findByTemplate($template);
 
             if (!$model) {
@@ -50,6 +52,8 @@ class FlushMailTemplatesCommand extends Command
 
                 $model->subject = $data['subject'] ?? '';
                 $model->body = $data['body'] ?? '';
+                $model->from_name = $data['fromName'] ?? null;
+                $model->from_email = $data['fromEmail'] ?? null;
 
                 $model->service_template = $data['serviceTemplate'] ?? null;
             }

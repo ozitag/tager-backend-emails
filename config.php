@@ -6,6 +6,8 @@ return [
     'templates' => [
         'contactForm' => [
             'label' => 'Contact form',
+            'fromName' => 'OZiTAG',
+            'fromEmail' => 'tager@ozitag.com',
             'templateParams' => [
                 'name' => 'Name',
                 'email' => 'E-Mail',

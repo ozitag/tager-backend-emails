@@ -14,6 +14,8 @@ class UpdateTemplateRequest extends CrudFormRequest
             'subject' => 'nullable|string',
             'body' => 'nullable|string',
             'serviceTemplate' => 'nullable|string',
+            'fromName' => 'nullable|string',
+            'fromEmail' => 'nullable|string|email',
         ];
     }
 }

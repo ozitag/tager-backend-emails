@@ -20,7 +20,7 @@ class TagerMailTemplateFactory
     private function getTemplateFromConfig($template)
     {
         $configTemplate = TagerMailConfig::getTemplate($template);
-        if(!$configTemplate){
+        if (!$configTemplate) {
             return null;
         }
 
@@ -30,6 +30,7 @@ class TagerMailTemplateFactory
         $result->setBody($configTemplate['body'] ?? null);
         $result->setRecipients($configTemplate['recipients'] ?? []);
         $result->setTemplate($template, null, $configTemplate['serviceTemplate'] ?? null);
+        $result->setFrom($template['fromName'] ?? null, $template['fromEmail'] ?? null);
 
         return $result;
     }
@@ -40,16 +41,19 @@ class TagerMailTemplateFactory
      */
     private function getTemplateFromDatabase($template)
     {
+        /** @var \OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate $model */
         $model = $this->templateRepository->findByTemplate($template);
         if (!$model) {
             return null;
         }
 
         $result = new TagerMailTemplate();
+
         $result->setSubject($model->subject);
         $result->setBody($model->body);
         $result->setRecipients($model->recipients ? explode(',', $model->recipients) : []);
         $result->setTemplate($model->template, $model->id, $model->service_template);
+        $result->setFrom($model->from_name, $model->from_email);
 
         return $result;
     }

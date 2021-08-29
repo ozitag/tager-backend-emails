@@ -32,6 +32,8 @@ class AdminMailTemplatesController extends AdminCrudController
             'alias' => 'template',
             'name',
             'serviceTemplate' => 'service_template',
+            'fromName' => 'from_name',
+            'fromEmail' => 'from_email',
             'subject', 'body',
             'recipients' => function ($model) {
                 return $model->recipients ? explode(',', $model->recipients) : [];

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class TagerMailTemplate
  * @package OZiTAG\Tager\Backend\Mail\Models
- * 
+ *
  * @property string $name
  * @property string $value
  * @property string $subject
@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $template
  * @property string $service_template
  * @property boolean $changed_by_admin
+ * @property string $from_email
+ * @property string $from_name
  */
 class TagerMailTemplate extends Model
 {
@@ -37,6 +39,7 @@ class TagerMailTemplate extends Model
         'body',
         'template',
         'service_template',
-        'changed_by_admin'
+        'changed_by_admin',
+        'from_email', 'from_name'
     ];
 }
