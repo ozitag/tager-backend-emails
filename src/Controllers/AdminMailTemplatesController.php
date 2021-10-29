@@ -39,7 +39,7 @@ class AdminMailTemplatesController extends AdminCrudController
             'recipients' => function (TagerMailTemplate $model) {
                 return $model->recipients ? explode(',', $model->recipients) : [];
             },
-            'сс' => function (TagerMailTemplate $model) {
+            'cc' => function (TagerMailTemplate $model) {
                 return $model->cc ? explode(',', $model->cc) : [];
             },
             'bcc' => function (TagerMailTemplate $model) {
