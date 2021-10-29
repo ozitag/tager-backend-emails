@@ -10,6 +10,10 @@ class TagerMailTemplate
 
     private $recipients = [];
 
+    private $cc = [];
+
+    private $bcc = [];
+
     private $template = null;
 
     private $databaseId = null;
@@ -33,6 +37,16 @@ class TagerMailTemplate
     public function setRecipients($value)
     {
         $this->recipients = $value;
+    }
+
+    public function setCc($value)
+    {
+        $this->cc = $value;
+    }
+
+    public function setBcc($value)
+    {
+        $this->bcc = $value;
     }
 
     public function setTemplate($template, $databaseId = null, $serviceTemplate = null)
@@ -76,6 +90,16 @@ class TagerMailTemplate
     public function getRecipients()
     {
         return $this->recipients;
+    }
+
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    public function getBcc()
+    {
+        return $this->bcc;
     }
 
     public function getFromName(){

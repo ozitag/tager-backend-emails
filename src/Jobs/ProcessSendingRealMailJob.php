@@ -68,10 +68,15 @@ class ProcessSendingRealMailJob extends QueueJob
     /**
      * @return bool
      */
-    private function isRecipientAllowed()
+    private function isRecipientAllowed(): bool
+    {
+        return $this->isEmailAllowed($this->to);
+    }
+
+    private function isEmailAllowed(string $email): bool
     {
         $validEmails = TagerMailConfig::getAllowedEmails();
-        return $validEmails == '*' || in_array($this->to, $validEmails);
+        return $validEmails == '*' || in_array($email, $validEmails);
     }
 
     public function handle(TagerMailSender $sender)
@@ -79,6 +84,24 @@ class ProcessSendingRealMailJob extends QueueJob
         if ($this->isRecipientAllowed() == false) {
             $this->setLogStatus(TagerMailStatus::Skip);
             return;
+        }
+
+        $ccFiltered = [];
+        if ($this->cc) {
+            foreach ($this->cc as $ccValue) {
+                if ($this->isEmailAllowed($ccValue)) {
+                    $ccFiltered[] = $ccValue;
+                }
+            }
+        }
+
+        $bccFiltered = [];
+        if ($this->bcc) {
+            foreach ($this->bcc as $bccValue) {
+                if ($this->isEmailAllowed($bccValue)) {
+                    $bccFiltered[] = $bccValue;
+                }
+            }
         }
 
         $this->setLogStatus(TagerMailStatus::Sending);
@@ -92,9 +115,9 @@ class ProcessSendingRealMailJob extends QueueJob
 
         try {
             if ($this->serviceTemplate) {
-                $sender->sendUsingServiceTemplate($this->to, $this->cc, $this->bcc, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
+                $sender->sendUsingServiceTemplate($this->to, $ccFiltered, $bccFiltered, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             } else {
-                $sender->send($this->to, $this->cc, $this->bcc, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
+                $sender->send($this->to, $ccFiltered, $bccFiltered, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             }
 
         } catch (\Throwable $exception) {

@@ -59,6 +59,8 @@ class FlushMailTemplatesCommand extends Command
                     } else if (is_string($data['cc'])) {
                         $model->cc = $data['cc'];
                     }
+                } else {
+                    $model->cc = null;
                 }
 
                 if (isset($data['bcc'])) {
@@ -67,6 +69,8 @@ class FlushMailTemplatesCommand extends Command
                     } else if (is_string($data['bcc'])) {
                         $model->bcc = $data['bcc'];
                     }
+                } else {
+                    $model->bcc = null;
                 }
 
                 $model->subject = $data['subject'] ?? '';

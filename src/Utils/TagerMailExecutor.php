@@ -96,6 +96,13 @@ class TagerMailExecutor
         if ($this->fromConfiguredManual == false && (!empty($template->getFromEmail()) || !empty($template->getFromName()))) {
             $this->setFrom($template->getFromEmail(), $template->getFromName());
         }
+
+        if($template->getCc()){
+            $this->setCc($template->getCc());
+        }
+        if($template->getBcc()){
+            $this->setBcc($template->getBcc());
+        }
     }
 
     /**

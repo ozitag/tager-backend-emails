@@ -29,6 +29,8 @@ class TagerMailTemplateFactory
         $result->setSubject($configTemplate['subject'] ?? null);
         $result->setBody($configTemplate['body'] ?? null);
         $result->setRecipients($configTemplate['recipients'] ?? []);
+        $result->setCc($configTemplate['cc'] ?? []);
+        $result->setBcc($configTemplate['bcc'] ?? []);
         $result->setTemplate($template, null, $configTemplate['serviceTemplate'] ?? null);
         $result->setFrom($template['fromName'] ?? null, $template['fromEmail'] ?? null);
 
@@ -52,6 +54,8 @@ class TagerMailTemplateFactory
         $result->setSubject($model->subject);
         $result->setBody($model->body);
         $result->setRecipients($model->recipients ? explode(',', $model->recipients) : []);
+        $result->setCc($model->cc ? explode(',', $model->cc) : []);
+        $result->setBcc($model->bcc ? explode(',', $model->bcc) : []);
         $result->setTemplate($model->template, $model->id, $model->service_template);
         $result->setFrom($model->from_name, $model->from_email);
 
