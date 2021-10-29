@@ -9,40 +9,57 @@ class TagerMail
 {
     private TagerMailExecutor $executor;
 
-    private ?string $fromEmail = null;
-
-    private ?string $fromName = null;
-
     public function __construct(TagerMailExecutor $executor)
     {
         $this->executor = $executor;
     }
 
-    public function setFrom(string $fromEmail, string $fromName)
+    public function setFrom(string $fromEmail, string $fromName): self
     {
-        $this->fromEmail = $fromEmail;
-
-        $this->fromName = $fromName;
-
+        $this->executor->setFrom($fromEmail, $fromName);
         return $this;
     }
 
     /**
-     * @param string[] $recipients
+     * @param string|string[] $cc
+     * @return $this
+     */
+    public function setCc($cc): self
+    {
+        $this->executor->setCc($cc);
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $to
+     * @return $this
+     */
+    public function setTo($to): self
+    {
+        $this->executor->setRecipients($to);
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $bcc
+     * @return $this
+     */
+    public function setBcc($bcc): self
+    {
+        $this->executor->setBcc($bcc);
+        return $this;
+    }
+
+    /**
      * @param string $subject
      * @param string $body
      * @param TagerMailAttachments|null $attachments
      */
-    public function sendMail($recipients, $subject, $body, ?TagerMailAttachments $attachments = null)
+    public function sendMail($subject, $body, ?TagerMailAttachments $attachments = null)
     {
-        $this->executor->setRecipients($recipients);
         $this->executor->setSubject($subject);
         $this->executor->setBody($body);
         $this->executor->setAttachments($attachments);
-
-        if ($this->fromEmail) {
-            $this->executor->setFrom($this->fromEmail, $this->fromName);
-        }
 
         $this->executor->run();
     }
@@ -56,13 +73,7 @@ class TagerMail
      */
     public function sendMailUsingTemplate($template, $templateValues = [], $recipients = null, ?TagerMailAttachments $attachments = null)
     {
-        $this->executor->setRecipients($recipients);
         $this->executor->setAttachments($attachments);
-
-        if ($this->fromEmail) {
-            $this->executor->setFrom($this->fromEmail, $this->fromName);
-        }
-
         $this->executor->setTemplate($template, $templateValues);
 
         if ($recipients) {

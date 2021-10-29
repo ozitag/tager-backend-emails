@@ -34,7 +34,7 @@ class TagerMailLog extends TModel
      */
     protected $fillable = [
         'template_id',
-        'recipient',
+        'recipient', 'cc', 'bcc',
         'subject',
         'body',
         'from_email',

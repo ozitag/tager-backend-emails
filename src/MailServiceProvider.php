@@ -6,6 +6,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Mail\Events\MessageSent;
 use OZiTAG\Tager\Backend\Mail\Console\FlushMailTemplatesCommand;
 use OZiTAG\Tager\Backend\Mail\Console\ResendSkipMailCommand;
+use OZiTAG\Tager\Backend\Mail\Console\TestMailCommand;
 use OZiTAG\Tager\Backend\Mail\Enums\MailScope;
 use OZiTAG\Tager\Backend\Mail\Events\MessageSentHandler;
 use OZiTAG\Tager\Backend\Mail\Transports\TransportFactory;

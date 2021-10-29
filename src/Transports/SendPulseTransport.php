@@ -26,6 +26,22 @@ class SendPulseTransport extends Transport
             ];
         }
 
+        $cc = [];
+        foreach ($message->getCc() as $email => $name) {
+            $cc[] = [
+                'name' => $name,
+                'email' => $email
+            ];
+        }
+
+        $bcc = [];
+        foreach ($message->getBcc() as $email => $name) {
+            $bcc[] = [
+                'name' => $name,
+                'email' => $email
+            ];
+        }
+
         $messageFrom = $message->getFrom();
         $key = array_keys($messageFrom)[0];
 
@@ -34,6 +50,8 @@ class SendPulseTransport extends Transport
             'subject' => $message->getSubject(),
             'html' => $message->getBody(),
             'to' => $to,
+            'сс' => $cc,
+            'bcc' => $bcc,
             'from' => [
                 'name' => $messageFrom[$key],
                 'email' => $key
@@ -53,12 +71,5 @@ class SendPulseTransport extends Transport
         $this->sendPerformed($message);
 
         return $this->numberOfRecipients($message);
-    }
-
-    protected function getTo(Swift_Mime_SimpleMessage $message)
-    {
-        return collect($message->getTo())->map(function ($display, $address) {
-            return ['email' => $address, 'name' => $display];
-        })->first();
     }
 }

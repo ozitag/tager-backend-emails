@@ -10,6 +10,8 @@ use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 class TagerMailExecutor
 {
     private ?array $recipients = null;
+    private ?array $cc = null;
+    private ?array $bcc = null;
 
     private ?string $subject = null;
 
@@ -45,6 +47,16 @@ class TagerMailExecutor
     public function setRecipients($recipients)
     {
         $this->recipients = is_array($recipients) ? $recipients : (is_null($recipients) ? $recipients : [$recipients]);
+    }
+
+    public function setCc($cc)
+    {
+        $this->cc = is_array($cc) ? $cc : (is_null($cc) ? $cc : [$cc]);
+    }
+
+    public function setBcc($bcc)
+    {
+        $this->bcc = is_array($bcc) ? $bcc : (is_null($bcc) ? $bcc : [$bcc]);
     }
 
     public function setSubject($value)
@@ -197,6 +209,8 @@ class TagerMailExecutor
         $this->logRepository->reset();
         return $this->logRepository->fillAndSave([
             'recipient' => $recipient,
+            'cc' => $this->cc && !empty($this->cc) ? implode(',', $this->cc) : null,
+            'bcc' => $this->bcc && !empty($this->bcc) ? implode(',', $this->bcc) : null,
             'subject' => $subject,
             'body' => $body,
             'from_email' => $this->fromEmail,
@@ -221,6 +235,8 @@ class TagerMailExecutor
 
         dispatch(new ProcessSendingRealMailJob(
             $recipient,
+            $this->cc ?? [],
+            $this->bcc ?? [],
             $this->getSubject(),
             $this->getBody(),
             $this->template ? $this->getTemplateInstance()->getServiceTemplate() : null,

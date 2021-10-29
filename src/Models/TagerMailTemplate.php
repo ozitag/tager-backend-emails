@@ -4,6 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OZiTAG\Tager\Backend\Core\Models\TModel;
 
 /**
  * Class TagerMailTemplate
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $value
  * @property string $subject
  * @property string $recipients
+ * @property string $cc
+ * @property string $bcc
  * @property string $body
  * @property string $template
  * @property string $service_template
@@ -20,11 +23,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $from_email
  * @property string $from_name
  */
-class TagerMailTemplate extends Model
+class TagerMailTemplate extends TModel
 {
     use SoftDeletes;
 
     protected $table = 'tager_mail_templates';
+
+    static $defaultOrder = 'priority ASC';
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +41,7 @@ class TagerMailTemplate extends Model
         'value',
         'subject',
         'recipients',
+        'cc', 'bcc',
         'body',
         'template',
         'service_template',

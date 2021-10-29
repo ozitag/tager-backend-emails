@@ -46,6 +46,8 @@ class MandrillTransport extends Transport
             'form_params' => [
                 'key' => $this->key,
                 'to' => $this->getTo($message),
+                'cc' => $this->getCc($message),
+                'bcc' => $this->getBcc($message),
                 'raw_message' => $message->toString(),
                 'async' => true,
             ],
@@ -72,9 +74,23 @@ class MandrillTransport extends Transport
             $to = array_merge($to, array_keys($message->getTo()));
         }
 
+        return $to;
+    }
+
+    protected function getCc(Swift_Mime_SimpleMessage $message)
+    {
+        $to = [];
+
         if ($message->getCc()) {
             $to = array_merge($to, array_keys($message->getCc()));
         }
+
+        return $to;
+    }
+
+    protected function getBcc(Swift_Mime_SimpleMessage $message)
+    {
+        $to = [];
 
         if ($message->getBcc()) {
             $to = array_merge($to, array_keys($message->getBcc()));

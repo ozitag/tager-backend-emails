@@ -32,6 +32,7 @@ class FlushMailTemplatesCommand extends Command
 
         $added = [];
 
+        $index = 1;
         foreach ($templates as $template => $data) {
             /** @var TagerMailTemplate $model */
             $model = $repository->findByTemplate($template);
@@ -41,12 +42,30 @@ class FlushMailTemplatesCommand extends Command
                 $model->template = $template;
             }
 
+            $model->priority = $index++;
+
             if ($model->changed_by_admin == false) {
                 if (isset($data['recipients'])) {
                     if (is_array($data['recipients'])) {
                         $model->recipients = implode(',', $data['recipients']);
                     } else if (is_string($data['recipients'])) {
                         $model->recipients = $data['recipients'];
+                    }
+                }
+
+                if (isset($data['cc'])) {
+                    if (is_array($data['cc'])) {
+                        $model->cc = implode(',', $data['cc']);
+                    } else if (is_string($data['cc'])) {
+                        $model->cc = $data['cc'];
+                    }
+                }
+
+                if (isset($data['bcc'])) {
+                    if (is_array($data['bcc'])) {
+                        $model->bcc = implode(',', $data['bcc']);
+                    } else if (is_string($data['bcc'])) {
+                        $model->bcc = $data['bcc'];
                     }
                 }
 

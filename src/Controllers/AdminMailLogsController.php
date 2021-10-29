@@ -28,7 +28,7 @@ class AdminMailLogsController extends AdminCrudController
         $this->setResourceFields([
             'id', 'template',
             'serviceTemplate' => 'service_template',
-            'recipient',
+            'recipient', 'cc', 'bcc',
             'subject',
             'body' => function ($model) {
                 return $model->body ?? $model->service_template_params;

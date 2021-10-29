@@ -4,6 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail\Controllers;
 
 use OZiTAG\Tager\Backend\Crud\Actions\StoreOrUpdateAction;
 use OZiTAG\Tager\Backend\Crud\Controllers\AdminCrudController;
+use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
 use OZiTAG\Tager\Backend\Mail\Requests\UpdateTemplateRequest;
 use OZiTAG\Tager\Backend\Mail\Jobs\UpdateTemplateJob;
@@ -35,8 +36,14 @@ class AdminMailTemplatesController extends AdminCrudController
             'fromName' => 'from_name',
             'fromEmail' => 'from_email',
             'subject', 'body',
-            'recipients' => function ($model) {
+            'recipients' => function (TagerMailTemplate $model) {
                 return $model->recipients ? explode(',', $model->recipients) : [];
+            },
+            'сс' => function (TagerMailTemplate $model) {
+                return $model->cc ? explode(',', $model->cc) : [];
+            },
+            'bcc' => function (TagerMailTemplate $model) {
+                return $model->bcc ? explode(',', $model->bcc) : [];
             },
             'variables' => function ($model) {
                 return (new TagerMailConfig())->getTemplateVariables($model->template);

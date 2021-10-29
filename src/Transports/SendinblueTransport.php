@@ -6,6 +6,7 @@ use Illuminate\Mail\Transport\Transport;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Model\SendSmtpEmail;
 use SendinBlue\Client\Model\SendSmtpEmailAttachment;
+use SendinBlue\Client\Model\SendSmtpEmailCc;
 use SendinBlue\Client\Model\SendSmtpEmailSender;
 use SendinBlue\Client\Model\SendSmtpEmailTo;
 use Swift_Mime_SimpleMessage;
@@ -61,22 +62,42 @@ class SendinblueTransport extends Transport
         $this->sendSmtpEmail->setSender(new SendSmtpEmailSender([
             'email' => config('mail.from.address'),
             'name' => config('mail.from.name')
-        ]))
-            ->setTo([new SendSmtpEmailTo($to)])
+        ]))->setTo([new SendSmtpEmailTo($this->getTo($message))])
             ->setHtmlContent($message->getBody())
             ->setSubject($message->getSubject());
 
+        $ccSend = [];
+        $cc = $this->getCc();
+        if (!empty($cc)) {
+            foreach ($cc as $ccValue) {
+                $ccSend[] = new SendSmtpEmailCc($ccValue);
+            }
+        }
+
+        $bccSend = [];
+        $bcc = $this->getBcc();
+        if (!empty($bcc)) {
+            foreach ($bcc as $bccValue) {
+                $bccSend[] = new SendSmtpEmailBcc($bccValue);
+            }
+        }
+
+        if (!empty($ccSend)) {
+            $this->sendSmtpEmail->setCc($ccSend);
+        }
+
+        if (!empty($bccSend)) {
+            $this->sendSmtpEmail->setBcc($bccSend);
+        }
+
         if (count($message->getChildren()) > 0) {
-
             $file = [];
-
             foreach ($message->getChildren() as $child) {
                 $file[] = new SendSmtpEmailAttachment([
                     'content' => base64_encode($child->getBody()),
                     'name' => $child->getFilename(),
                 ]);
             }
-
             $this->sendSmtpEmail->setAttachment($file);
         }
     }
@@ -92,5 +113,31 @@ class SendinblueTransport extends Transport
         return collect($message->getTo())->map(function ($display, $address) {
             return ['email' => $address, 'name' => $display];
         })->first();
+    }
+
+    /**
+     * Get the "cc" payload field for the API request.
+     *
+     * @param \Swift_Mime_SimpleMessage $message
+     * @return array
+     */
+    protected function getCc(Swift_Mime_SimpleMessage $message)
+    {
+        return collect($message->getCc())->map(function ($display, $address) {
+            return ['email' => $address, 'name' => $display];
+        });
+    }
+
+    /**
+     * Get the "bcc" payload field for the API request.
+     *
+     * @param \Swift_Mime_SimpleMessage $message
+     * @return array
+     */
+    protected function getBcc(Swift_Mime_SimpleMessage $message)
+    {
+        return collect($message->getBcc())->map(function ($display, $address) {
+            return ['email' => $address, 'name' => $display];
+        });
     }
 }
