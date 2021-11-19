@@ -6,7 +6,7 @@ use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
 
 interface ITagerMailService
 {
-    public function sendUsingTemplate(string $to, string $cc, string $bcc, string $template, ?array $templateParams = null, ?string $subject = null, ?TagerMailAttachments $attachments = null, ?string $fromEmail = null, ?string $fromName = null);
+    public function sendUsingTemplate(string $to, array $cc, array $bcc, string $template, ?array $templateParams = null, ?string $subject = null, ?TagerMailAttachments $attachments = null, ?string $fromEmail = null, ?string $fromName = null);
 
     public function getTemplates();
 }

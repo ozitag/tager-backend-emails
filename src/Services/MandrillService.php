@@ -85,7 +85,7 @@ class MandrillService implements ITagerMailService
         return $result;
     }
 
-    public function sendUsingTemplate(string $to, string $cc, string $bcc, string $template, ?array $templateParams = null, ?string $subject = null, ?TagerMailAttachments $attachments = null, ?string $fromEmail = null, ?string $fromName = null)
+    public function sendUsingTemplate(string $to, array $cc, array $bcc, string $template, ?array $templateParams = null, ?string $subject = null, ?TagerMailAttachments $attachments = null, ?string $fromEmail = null, ?string $fromName = null)
     {
         $this->httpRequest('messages/send-template', [
             'template_name' => $template,
