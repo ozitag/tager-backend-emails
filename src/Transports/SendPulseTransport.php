@@ -27,19 +27,23 @@ class SendPulseTransport extends Transport
         }
 
         $cc = [];
-        foreach ($message->getCc() as $email => $name) {
-            $cc[] = [
-                'name' => $name,
-                'email' => $email
-            ];
+        if($message->getCc()) {
+            foreach ($message->getCc() as $email => $name) {
+                $cc[] = [
+                    'name' => $name,
+                    'email' => $email
+                ];
+            }
         }
 
         $bcc = [];
-        foreach ($message->getBcc() as $email => $name) {
-            $bcc[] = [
-                'name' => $name,
-                'email' => $email
-            ];
+        if($message->getBcc()) {
+            foreach ($message->getBcc() as $email => $name) {
+                $bcc[] = [
+                    'name' => $name,
+                    'email' => $email
+                ];
+            }
         }
 
         $messageFrom = $message->getFrom();
