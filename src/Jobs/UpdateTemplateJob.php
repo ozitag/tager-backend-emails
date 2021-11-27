@@ -33,6 +33,7 @@ class UpdateTemplateJob extends Job
         return $mailTemplateRepository->fillAndSave([
             'subject' => $this->request->subject,
             'body' => $this->request->body,
+            'editor_mode' => $this->request->editorMode,
             'service_template' => $this->request->serviceTemplate,
             'recipients' => $this->request->recipients ? implode(',', $this->request->recipients) : null,
             'cc' => $this->request->cc ? implode(',', $this->request->cc) : null,

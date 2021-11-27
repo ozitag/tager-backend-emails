@@ -35,7 +35,7 @@ class AdminMailTemplatesController extends AdminCrudController
             'serviceTemplate' => 'service_template',
             'fromName' => 'from_name',
             'fromEmail' => 'from_email',
-            'subject', 'body',
+            'subject', 'body', 'editorMode' => 'editor_mode',
             'recipients' => function (TagerMailTemplate $model) {
                 return $model->recipients ? explode(',', $model->recipients) : [];
             },

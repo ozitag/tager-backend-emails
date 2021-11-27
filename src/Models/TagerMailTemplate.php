@@ -13,6 +13,7 @@ use OZiTAG\Tager\Backend\Core\Models\TModel;
  * @property string $name
  * @property string $value
  * @property string $subject
+ * @property string $editor_mode
  * @property string $recipients
  * @property string $cc
  * @property string $bcc
@@ -42,7 +43,7 @@ class TagerMailTemplate extends TModel
         'subject',
         'recipients',
         'cc', 'bcc',
-        'body',
+        'body', 'editor_mode',
         'template',
         'service_template',
         'changed_by_admin',
