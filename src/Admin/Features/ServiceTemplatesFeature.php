@@ -1,6 +1,6 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Mail\Features;
+namespace OZiTAG\Tager\Backend\Mail\Admin\Features;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use OZiTAG\Tager\Backend\Core\Features\Feature;

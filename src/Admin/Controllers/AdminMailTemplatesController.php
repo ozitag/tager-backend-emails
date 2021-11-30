@@ -1,12 +1,12 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Mail\Controllers;
+namespace OZiTAG\Tager\Backend\Mail\Admin\Controllers;
 
 use OZiTAG\Tager\Backend\Crud\Actions\StoreOrUpdateAction;
 use OZiTAG\Tager\Backend\Crud\Controllers\AdminCrudController;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
-use OZiTAG\Tager\Backend\Mail\Requests\UpdateTemplateRequest;
+use OZiTAG\Tager\Backend\Mail\Admin\Requests\UpdateTemplateRequest;
 use OZiTAG\Tager\Backend\Mail\Jobs\UpdateTemplateJob;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 

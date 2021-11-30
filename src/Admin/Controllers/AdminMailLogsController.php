@@ -1,6 +1,6 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Mail\Controllers;
+namespace OZiTAG\Tager\Backend\Mail\Admin\Controllers;
 
 use OZiTAG\Tager\Backend\Crud\Actions\IndexAction;
 use OZiTAG\Tager\Backend\Crud\Controllers\AdminCrudController;

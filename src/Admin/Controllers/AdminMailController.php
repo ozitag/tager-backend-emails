@@ -1,10 +1,10 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Mail\Controllers;
+namespace OZiTAG\Tager\Backend\Mail\Admin\Controllers;
 
 use OZiTAG\Tager\Backend\Core\Controllers\Controller;
-use OZiTAG\Tager\Backend\Mail\Features\InfoFeature;
-use OZiTAG\Tager\Backend\Mail\Features\ServiceTemplatesFeature;
+use OZiTAG\Tager\Backend\Mail\Features\Admin\InfoFeature;
+use OZiTAG\Tager\Backend\Mail\Features\Admin\ServiceTemplatesFeature;
 
 class AdminMailController extends Controller
 {

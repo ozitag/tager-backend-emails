@@ -1,6 +1,6 @@
 <?php
 
-namespace OZiTAG\Tager\Backend\Mail\Requests;
+namespace OZiTAG\Tager\Backend\Mail\Admin\Requests;
 
 use Illuminate\Validation\Rules\Enum;
 use OZiTAG\Tager\Backend\Crud\Requests\CrudFormRequest;
