@@ -6,6 +6,7 @@ use Illuminate\Mail\Transport\MailgunTransport;
 use Illuminate\Support\Facades\Mail;
 use OZiTAG\Tager\Backend\Core\Jobs\QueueJob;
 use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Transports\SendPulseTransport;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailSender;
@@ -117,6 +118,10 @@ class ProcessSendingRealMailJob extends QueueJob
             if (empty(config('services.mailgun.domain'))) {
                 $this->setLogStatus(TagerMailStatus::Failure, 'Mailgun domain is empty');
                 return;
+            }
+        } else if ($transport instanceof SendPulseTransport) {
+            if (empty($this->body)) {
+                $this->body = ' ';
             }
         }
 
