@@ -27,7 +27,7 @@ class SendPulseTransport extends Transport
         }
 
         $cc = [];
-        if($message->getCc()) {
+        if ($message->getCc()) {
             foreach ($message->getCc() as $email => $name) {
                 $cc[] = [
                     'name' => $name,
@@ -37,7 +37,7 @@ class SendPulseTransport extends Transport
         }
 
         $bcc = [];
-        if($message->getBcc()) {
+        if ($message->getBcc()) {
             foreach ($message->getBcc() as $email => $name) {
                 $bcc[] = [
                     'name' => $name,
@@ -63,9 +63,8 @@ class SendPulseTransport extends Transport
         ];
 
         foreach ($message->getChildren() as $child) {
-            $emailData['attachments'][$child->getFilename()] = base64_encode($child->getBody());
+            $emailData['attachments_binary'][$child->getFilename()] = base64_encode($child->getBody());
         }
-
         $result = $this->sendPulseApiClient->smtpSendMail($emailData);
 
         if (property_exists($result, 'is_error') && $result->is_error) {

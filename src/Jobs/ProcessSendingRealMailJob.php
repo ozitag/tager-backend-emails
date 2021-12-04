@@ -40,6 +40,8 @@ class ProcessSendingRealMailJob extends QueueJob
     /** @var TagerMailAttachments|null */
     private $attachments = null;
 
+    private $localTempAttachments = [];
+
     private ?string $fromName;
 
     private ?string $fromEmail;
@@ -78,6 +80,47 @@ class ProcessSendingRealMailJob extends QueueJob
     {
         $validEmails = TagerMailConfig::getAllowedEmails();
         return $validEmails == '*' || in_array($email, $validEmails);
+    }
+
+    private function downloadAttachment(string $url): ?string
+    {
+        $fileName = storage_path('tager_mail_attachment_' . rand(0, 20000));
+
+        $fileContent = file_get_contents($url);
+        if (!empty($fileContent)) {
+            $f = fopen($fileName, 'w+');
+            fwrite($f, $fileContent);
+            fclose($f);
+
+            return $fileName;
+        }
+
+        return null;
+    }
+
+    private function prepareAttachments()
+    {
+        $this->localTempAttachments = [];
+
+        if ($this->attachments) {
+            foreach ($this->attachments->getItems() as $ind => $attachment) {
+                if (empty($attachment['path']) && !empty($attachment['url'])) {
+                    $localFile = $this->downloadAttachment($attachment['url']);
+
+                    if ($localFile) {
+                        $this->localTempAttachments[] = $localFile;
+                        $this->attachments->setFilePath($ind, $localFile);
+                    }
+                }
+            }
+        }
+    }
+
+    private function clearAttachments()
+    {
+        foreach ($this->localTempAttachments as $localTempAttachment) {
+            @unlink($localTempAttachment);
+        }
     }
 
     public function handle(TagerMailSender $sender)
@@ -126,6 +169,8 @@ class ProcessSendingRealMailJob extends QueueJob
         }
 
         try {
+            $this->prepareAttachments();
+
             if ($this->serviceTemplate) {
                 $sender->sendUsingServiceTemplate($this->to, $ccFiltered, $bccFiltered, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             } else {
@@ -133,6 +178,8 @@ class ProcessSendingRealMailJob extends QueueJob
             }
         } catch (\Throwable $exception) {
             $this->setLogStatus(TagerMailStatus::Failure, $exception->getMessage());
+        } finally {
+            $this->clearAttachments();
         }
     }
 }

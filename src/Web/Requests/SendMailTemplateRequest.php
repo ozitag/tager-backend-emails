@@ -6,9 +6,10 @@ use OZiTAG\Tager\Backend\Core\Http\FormRequest;
 
 /**
  *
+ * @property string $to
  * @property string $template
  * @property array $params
- * @property string $to
+ * @property array $attachments
  */
 class SendMailTemplateRequest extends FormRequest
 {
@@ -20,6 +21,10 @@ class SendMailTemplateRequest extends FormRequest
             'params' => 'present|array',
             'params.*.name' => 'required|string',
             'params.*.value' => 'nullable|string',
+            'attachments' => 'nullable|array',
+            'attachments.*.name' => 'required|string',
+            'attachments.*.mime' => 'required|string',
+            'attachments.*.url' => 'required|string|url',
         ];
     }
 }

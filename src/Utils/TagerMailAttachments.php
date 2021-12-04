@@ -24,6 +24,13 @@ class TagerMailAttachments
         ];
     }
 
+    public function setFilePath(int $attachmentIndex, string $filePath)
+    {
+        if (isset($this->items[$attachmentIndex])) {
+            $this->items[$attachmentIndex]['path'] = $filePath;
+        }
+    }
+
     public function addFile(File $file, $filename = null)
     {
         $this->add($file->getPath(), $filename ? $filename : $file->name, $file->mime, $file->getUrl());
@@ -40,6 +47,8 @@ class TagerMailAttachments
     public function injectToMessage(Message $message)
     {
         foreach ($this->items as $item) {
+            if (empty($item['path'])) continue;
+
             $options = [];
 
             if (!empty($item['as'])) {
