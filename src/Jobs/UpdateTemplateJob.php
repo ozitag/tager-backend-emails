@@ -3,9 +3,9 @@
 namespace OZiTAG\Tager\Backend\Mail\Jobs;
 
 use OZiTAG\Tager\Backend\Core\Jobs\Job;
+use OZiTAG\Tager\Backend\Mail\Admin\Requests\UpdateTemplateRequest;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailTemplate;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailTemplateRepository;
-use OZiTAG\Tager\Backend\Mail\Requests\UpdateTemplateRequest;
 
 class UpdateTemplateJob extends Job
 {
