@@ -50,12 +50,12 @@ class TagerMail
         return $this;
     }
 
-    public function sendMail(string $to, string $subject, string $body, ?TagerMailAttachments $attachments = null)
+    public function sendMail(string|string[] $to, string $subject, string $body, ?TagerMailAttachments $attachments = null)
     {
         $this->executor->setSubject($subject);
         $this->executor->setBody($body);
         $this->executor->setAttachments($attachments);
-        $this->executor->setRecipients([$to]);
+        $this->executor->setRecipients(is_array($to) ? $to : [$to]);
 
         $this->executor->run();
     }
