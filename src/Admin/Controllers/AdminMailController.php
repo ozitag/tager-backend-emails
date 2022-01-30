@@ -3,8 +3,8 @@
 namespace OZiTAG\Tager\Backend\Mail\Admin\Controllers;
 
 use OZiTAG\Tager\Backend\Core\Controllers\Controller;
-use OZiTAG\Tager\Backend\Mail\Features\Admin\InfoFeature;
-use OZiTAG\Tager\Backend\Mail\Features\Admin\ServiceTemplatesFeature;
+use OZiTAG\Tager\Backend\Mail\Admin\Features\InfoFeature;
+use OZiTAG\Tager\Backend\Mail\Admin\Features\ServiceTemplatesFeature;
 
 class AdminMailController extends Controller
 {
