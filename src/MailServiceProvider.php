@@ -50,34 +50,10 @@ class MailServiceProvider extends EventServiceProvider
         }
 
         TagerScopes::registerGroup(__('tager-mail::scopes.group'), [
-            MailScope::ViewTemplates => __('tager-mail::scopes.view_templates'),
-            MailScope::EditTemplates => __('tager-mail::scopes.edit_templates'),
-            MailScope::ViewLogs => __('tager-mail::scopes.view_logs')
+            MailScope::ViewTemplates->value => __('tager-mail::scopes.view_templates'),
+            MailScope::EditTemplates->value => __('tager-mail::scopes.edit_templates'),
+            MailScope::ViewLogs->value => __('tager-mail::scopes.view_logs')
         ]);
-
-        $this->app['mail.manager']->extend('mandrill', function () {
-            return TransportFactory::mandrill(
-                $this->app['config']->get('services.mandrill', [])
-            );
-        });
-
-        $this->app['mail.manager']->extend('sendinblue', function () {
-            return TransportFactory::sendinblue(
-                $this->app['config']->get('services.sendinblue', [])
-            );
-        });
-
-        $this->app['mail.manager']->extend('sendgrid', function () {
-            return TransportFactory::sendgrid(
-                $this->app['config']->get('services.sendgrid', [])
-            );
-        });
-
-        $this->app['mail.manager']->extend('sendpulse', function () {
-            return TransportFactory::sendpulse(
-                $this->app['config']->get('services.sendpulse', [])
-            );
-        });
 
         parent::boot();
     }

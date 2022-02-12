@@ -3,17 +3,18 @@
 namespace OZiTAG\Tager\Backend\Mail\Jobs;
 
 use OZiTAG\Tager\Backend\Core\Jobs\Job;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 
 class SetLogStatusJob extends Job
 {
     private $logId;
 
-    private $status;
+    protected MailStatus $status;
 
     private $error;
 
-    public function __construct($logId, $status, $error = null)
+    public function __construct($logId, MailStatus $status, $error = null)
     {
         $this->logId = $logId;
         $this->status = $status;
@@ -32,7 +33,7 @@ class SetLogStatusJob extends Job
         }
 
         $repository->fillAndSave([
-            'status' => $this->status,
+            'status' => $this->status->value,
             'error' => $this->error,
         ]);
     }

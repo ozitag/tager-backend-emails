@@ -30,7 +30,7 @@ class TagerMailTemplate extends TModel
 
     protected $table = 'tager_mail_templates';
 
-    static $defaultOrder = 'priority ASC';
+    static string $defaultOrder = 'priority ASC';
 
     /**
      * The attributes that are mass assignable.

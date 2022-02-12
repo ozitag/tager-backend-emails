@@ -5,7 +5,6 @@ namespace OZiTAG\Tager\Backend\Mail\Admin\Requests;
 use Illuminate\Validation\Rules\Enum;
 use OZiTAG\Tager\Backend\Crud\Requests\CrudFormRequest;
 use OZiTAG\Tager\Backend\Mail\Enums\MailTemplateEditorMode;
-use OZiTAG\Tager\Backend\Validation\Rule;
 
 /**
  * @property string[] $recipients
@@ -31,7 +30,7 @@ class UpdateTemplateRequest extends CrudFormRequest
             'bcc.*' => 'email',
             'subject' => 'nullable|string',
             'body' => 'nullable|string',
-            'editorMode' => ['required', 'string', Rule::in(MailTemplateEditorMode::getValues())],
+            'editorMode' => ['required', 'string', new Enum(MailTemplateEditorMode::class)],
             'serviceTemplate' => 'nullable|string',
             'fromName' => 'nullable|string',
             'fromEmail' => 'nullable|string|email',

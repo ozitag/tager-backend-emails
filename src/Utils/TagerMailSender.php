@@ -4,7 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail\Utils;
 
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailInvalidServiceConfigException;
 use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailSenderException;
 use OZiTAG\Tager\Backend\Mail\Jobs\SetLogStatusJob;
@@ -48,7 +48,7 @@ class TagerMailSender
                 throw new TagerMailInvalidServiceConfigException('Service can not be initialized');
             }
             $service->sendUsingTemplate($to, $cc, $bcc, $serviceTemplate, $serviceTemplateParams, $subject, $attachments, $fromEmail, $fromName, $logId);
-            dispatch(new SetLogStatusJob($logId, TagerMailStatus::Success));
+            dispatch(new SetLogStatusJob($logId, MailStatus::Success));
         } catch (\Exception $exception) {
             throw new TagerMailSenderException($exception->getMessage());
         }

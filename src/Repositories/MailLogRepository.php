@@ -5,7 +5,7 @@ namespace OZiTAG\Tager\Backend\Mail\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use OZiTAG\Tager\Backend\Core\Repositories\EloquentRepository;
 use OZiTAG\Tager\Backend\Core\Repositories\ISearchable;
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Models\TagerMailLog;
 
 class MailLogRepository extends EloquentRepository implements ISearchable
@@ -25,7 +25,7 @@ class MailLogRepository extends EloquentRepository implements ISearchable
 
         return $this->model
             ->where('created_at', '>=', $startDateTime)
-            ->where('status', '=', TagerMailStatus::Skip)
+            ->where('status', '=', MailStatus::Skip)
             ->get();
     }
 

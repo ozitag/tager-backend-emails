@@ -2,7 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Utils;
 
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailInvalidMessageException;
 use OZiTAG\Tager\Backend\Mail\Jobs\ProcessSendingRealMailJob;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
@@ -194,7 +194,7 @@ class TagerMailExecutor
         return $this->prepareBody($result, $this->templateFields);
     }
 
-    private function createLogItem($recipient, $status = TagerMailStatus::Created)
+    private function createLogItem($recipient, $status = MailStatus::Created)
     {
         if (TagerMailConfig::hasDatabase() == false) {
             return null;
@@ -234,11 +234,11 @@ class TagerMailExecutor
     private function send($recipient)
     {
         if (TagerMailConfig::isDisabled()) {
-            $this->createLogItem($recipient, TagerMailStatus::Disabled);
+            $this->createLogItem($recipient, MailStatus::Disabled);
             return;
         }
 
-        $log = $this->createLogItem($recipient, TagerMailStatus::Created);
+        $log = $this->createLogItem($recipient, MailStatus::Created);
 
         dispatch(new ProcessSendingRealMailJob(
             $recipient,

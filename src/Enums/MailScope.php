@@ -2,11 +2,9 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Enums;
 
-use OZiTAG\Tager\Backend\Core\Enums\Enum;
-
-final class MailScope extends Enum
+enum MailScope:string
 {
-    const ViewTemplates = 'mail.view-templates';
-    const EditTemplates = 'mail.edit-templates';
-    const ViewLogs = 'mail.view-logs';
+    case ViewTemplates = 'mail.view-templates';
+    case EditTemplates = 'mail.edit-templates';
+    case ViewLogs = 'mail.view-logs';
 }

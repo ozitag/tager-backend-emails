@@ -3,7 +3,7 @@
 namespace OZiTAG\Tager\Backend\Mail\Events;
 
 use Illuminate\Mail\Events\MessageSent;
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Jobs\SetLogStatusJob;
 
 class MessageSentHandler
@@ -22,7 +22,7 @@ class MessageSentHandler
             return;
         }
 
-        dispatch(new SetLogStatusJob($logItemId, TagerMailStatus::Success));
+        dispatch(new SetLogStatusJob($logItemId, MailStatus::Success));
     }
 
 }

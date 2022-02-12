@@ -6,6 +6,7 @@ use Illuminate\Mail\Transport\Transport;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Model\SendSmtpEmail;
 use SendinBlue\Client\Model\SendSmtpEmailAttachment;
+use SendinBlue\Client\Model\SendSmtpEmailBcc;
 use SendinBlue\Client\Model\SendSmtpEmailCc;
 use SendinBlue\Client\Model\SendSmtpEmailSender;
 use SendinBlue\Client\Model\SendSmtpEmailTo;

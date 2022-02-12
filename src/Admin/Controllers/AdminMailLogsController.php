@@ -4,7 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail\Admin\Controllers;
 
 use OZiTAG\Tager\Backend\Crud\Actions\IndexAction;
 use OZiTAG\Tager\Backend\Crud\Controllers\AdminCrudController;
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Repositories\MailLogRepository;
 
 class AdminMailLogsController extends AdminCrudController
@@ -35,7 +35,7 @@ class AdminMailLogsController extends AdminCrudController
             },
             'fromEmail' => 'from_email',
             'fromName' => 'from_name',
-            'status', 'statusLabel:enum:' . TagerMailStatus::class,
+            'status', 'statusLabel:enum:' . MailStatus::class,
             'error',
             'attachments' => function ($model) {
                 $attachments = [];

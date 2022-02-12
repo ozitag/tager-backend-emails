@@ -25,7 +25,7 @@ class TagerMailLog extends TModel
 {
     protected $table = 'tager_mail_logs';
 
-    static $defaultOrder = 'created_at desc';
+    static string $defaultOrder = 'created_at desc';
 
     /**
      * The attributes that are mass assignable.

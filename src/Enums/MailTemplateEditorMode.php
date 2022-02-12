@@ -2,10 +2,8 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Enums;
 
-use OZiTAG\Tager\Backend\Core\Enums\Enum;
-
-final class MailTemplateEditorMode extends Enum
+enum MailTemplateEditorMode: string
 {
-    const Visual = 'VISUAL';
-    const Code = 'CODE';
+    case Visual = 'VISUAL';
+    case Code = 'CODE';
 }

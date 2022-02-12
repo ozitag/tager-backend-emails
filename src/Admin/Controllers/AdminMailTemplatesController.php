@@ -50,6 +50,9 @@ class AdminMailTemplatesController extends AdminCrudController
             }
         ], true);
 
-        $this->setUpdateAction(new StoreOrUpdateAction(UpdateTemplateRequest::class, UpdateTemplateJob::class));
+        $this->setUpdateAction(new StoreOrUpdateAction(
+            UpdateTemplateRequest::class,
+            UpdateTemplateJob::class
+        ));
     }
 }

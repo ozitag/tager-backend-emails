@@ -5,7 +5,7 @@ namespace OZiTAG\Tager\Backend\Mail\Jobs;
 use Illuminate\Mail\Transport\MailgunTransport;
 use Illuminate\Support\Facades\Mail;
 use OZiTAG\Tager\Backend\Core\Jobs\QueueJob;
-use OZiTAG\Tager\Backend\Mail\Enums\TagerMailStatus;
+use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Transports\SendPulseTransport;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailAttachments;
 use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
@@ -126,7 +126,7 @@ class ProcessSendingRealMailJob extends QueueJob
     public function handle(TagerMailSender $sender)
     {
         if ($this->isRecipientAllowed() == false) {
-            $this->setLogStatus(TagerMailStatus::Skip);
+            $this->setLogStatus(MailStatus::Skip);
             return;
         }
 
@@ -148,18 +148,18 @@ class ProcessSendingRealMailJob extends QueueJob
             }
         }
 
-        $this->setLogStatus(TagerMailStatus::Sending);
+        $this->setLogStatus(MailStatus::Sending);
 
         try {
             $transport = Mail::getSwiftMailer()->getTransport();
         } catch (\Exception $exception) {
-            $this->setLogStatus(TagerMailStatus::Failure, 'Transport Init Error: ' . $exception->getMessage());
+            $this->setLogStatus(MailStatus::Failure, 'Transport Init Error: ' . $exception->getMessage());
             return;
         }
 
         if ($transport instanceof MailgunTransport) {
             if (empty(config('services.mailgun.domain'))) {
-                $this->setLogStatus(TagerMailStatus::Failure, 'Mailgun domain is empty');
+                $this->setLogStatus(MailStatus::Failure, 'Mailgun domain is empty');
                 return;
             }
         } else if ($transport instanceof SendPulseTransport) {
@@ -177,7 +177,7 @@ class ProcessSendingRealMailJob extends QueueJob
                 $sender->send($this->to, $ccFiltered, $bccFiltered, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             }
         } catch (\Throwable $exception) {
-            $this->setLogStatus(TagerMailStatus::Failure, $exception->getMessage());
+            $this->setLogStatus(MailStatus::Failure, $exception->getMessage());
         } finally {
             $this->clearAttachments();
         }
