@@ -151,24 +151,6 @@ class ProcessSendingRealMailJob extends QueueJob
         $this->setLogStatus(MailStatus::Sending);
 
         try {
-            $transport = Mail::getSwiftMailer()->getTransport();
-        } catch (\Exception $exception) {
-            $this->setLogStatus(MailStatus::Failure, 'Transport Init Error: ' . $exception->getMessage());
-            return;
-        }
-
-        if ($transport instanceof MailgunTransport) {
-            if (empty(config('services.mailgun.domain'))) {
-                $this->setLogStatus(MailStatus::Failure, 'Mailgun domain is empty');
-                return;
-            }
-        } else if ($transport instanceof SendPulseTransport) {
-            if (empty($this->body)) {
-                $this->body = ' ';
-            }
-        }
-
-        try {
             $this->prepareAttachments();
 
             if ($this->serviceTemplate) {
