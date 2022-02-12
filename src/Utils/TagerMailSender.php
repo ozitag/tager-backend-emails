@@ -3,12 +3,12 @@
 namespace OZiTAG\Tager\Backend\Mail\Utils;
 
 use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Mail;
 use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
 use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailInvalidServiceConfigException;
 use OZiTAG\Tager\Backend\Mail\Exceptions\TagerMailSenderException;
 use OZiTAG\Tager\Backend\Mail\Jobs\SetLogStatusJob;
 use OZiTAG\Tager\Backend\Mail\Services\TagerMailServiceFactory;
+use Illuminate\Support\Facades\Mail;
 
 class TagerMailSender
 {
@@ -16,21 +16,24 @@ class TagerMailSender
     {
         try {
             Mail::send([], ['eventData' => ['logId' => $logId]], function (Message $message) use ($to, $cc, $bcc, $subject, $body, $attachments, $fromEmail, $fromName) {
-                $message->setBody($body, 'text/html', 'UTF-8');
-                $message->setTo($to);
+
+                $message->html($body);
+                $message->to($to);
 
                 if ($cc) {
-                    $message->setCc($cc);
+                    $message->cc($cc);
                 }
 
                 if ($bcc) {
-                    $message->setBcc($bcc);
+                    $message->bcc($bcc);
                 }
 
-                $message->setSubject($subject);
+                $message->subject($subject);
+
                 if ($fromEmail) {
-                    $message->setFrom($fromEmail, $fromName);
+                    $message->from($fromEmail, $fromName);
                 }
+
                 if ($attachments) {
                     $attachments->injectToMessage($message);
                 }
