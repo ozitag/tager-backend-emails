@@ -74,7 +74,7 @@ class TagerMailConfig
      */
     public static function getMandrillSecret()
     {
-        return config('services.mandrill.secret');
+        return config('services.mandrill.apiKey');
     }
 
     /**

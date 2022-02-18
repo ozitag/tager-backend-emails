@@ -18,7 +18,7 @@ class TagerMailServiceFactory
             $apiKey = TagerMailConfig::getMandrillSecret();
 
             if (empty($apiKey)) {
-                throw new TagerMailInvalidServiceConfigException('Secret for Mandrill is not set');
+                throw new TagerMailInvalidServiceConfigException('Mandrill API Key is not set');
             }
 
             return new MandrillService($apiKey);

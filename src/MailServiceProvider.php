@@ -13,6 +13,7 @@ use OZiTAG\Tager\Backend\Mail\Enums\MailScope;
 use OZiTAG\Tager\Backend\Mail\Events\MessageSentHandler;
 use OZiTAG\Tager\Backend\Mail\Transports\SendPulseTransport;
 use OZiTAG\Tager\Backend\Mail\Transports\TransportFactory;
+use OZiTAG\Tager\Backend\Mail\Utils\TagerMailConfig;
 use OZiTAG\Tager\Backend\Rbac\TagerScopes;
 use Sendpulse\RestApi\ApiClient;
 use Sendpulse\RestApi\Storage\FileStorage;
@@ -69,13 +70,13 @@ class MailServiceProvider extends EventServiceProvider
         });
 
         Mail::extend('mandrill', function () {
-            $config = $this->app['config']->get('services.mandrill', []);
+            $apiKey = TagerMailConfig::getMandrillSecret();
 
-            if (!isset($config['apiKey'])) {
+            if (empty($apiKey)) {
                 throw new \Exception('Mandrill API Key is not set');
             }
 
-            return new MandrillApiTransport($config['apiKey']);
+            return new MandrillApiTransport($apiKey);
         });
 
         parent::boot();
