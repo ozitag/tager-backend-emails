@@ -16,6 +16,7 @@ use OZiTAG\Tager\Backend\Mail\Transports\TransportFactory;
 use OZiTAG\Tager\Backend\Rbac\TagerScopes;
 use Sendpulse\RestApi\ApiClient;
 use Sendpulse\RestApi\Storage\FileStorage;
+use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillApiTransport;
 
 class MailServiceProvider extends EventServiceProvider
 {
@@ -65,6 +66,16 @@ class MailServiceProvider extends EventServiceProvider
             );
 
             return new SendPulseTransport($SPApiClient);
+        });
+
+        Mail::extend('mandrill', function () {
+            $config = $this->app['config']->get('services.mandrill', []);
+
+            if (!isset($config['apiKey'])) {
+                throw new \Exception('Mandrill API Key is not set');
+            }
+
+            return new MandrillApiTransport($config['apiKey']);
         });
 
         parent::boot();
