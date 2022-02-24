@@ -2,8 +2,10 @@
 
 namespace OZiTAG\Tager\Backend\Mail;
 
+use GuzzleHttp\Client as HttpClient;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Mail\Events\MessageSent;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
 use OZiTAG\Tager\Backend\Mail\Console\FlushMailTemplatesCommand;
@@ -18,6 +20,8 @@ use OZiTAG\Tager\Backend\Rbac\TagerScopes;
 use Sendpulse\RestApi\ApiClient;
 use Sendpulse\RestApi\Storage\FileStorage;
 use Symfony\Component\Mailer\Bridge\Mailchimp\Transport\MandrillApiTransport;
+use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridTransportFactory;
+use Symfony\Component\Mailer\Transport\Dsn;
 
 class MailServiceProvider extends EventServiceProvider
 {
@@ -56,6 +60,15 @@ class MailServiceProvider extends EventServiceProvider
             MailScope::EditTemplates->value => __('tager-mail::scopes.edit_templates'),
             MailScope::ViewLogs->value => __('tager-mail::scopes.view_logs')
         ]);
+
+
+        Mail::extend('sendgrid', function () {
+            $config = $this->app['config']->get('services.sendgrid', []);
+
+            return (new SendgridTransportFactory())->create(
+                Dsn::fromString('sendgrid://' . $config['api_key'] . '@default')
+            );
+        });
 
         Mail::extend('sendpulse', function () {
             $config = $this->app['config']->get('services.sendpulse', []);
