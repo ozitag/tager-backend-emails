@@ -59,7 +59,7 @@ class SendPulseTransport extends AbstractTransport
         $key = array_keys($messageFrom)[0];
 
         $emailData = [
-            'attachments' => [],
+            'attachments_binary' => [],
             'subject' => $message->getSubject(),
             'html' => $message->getHtmlBody(),
             'to' => $to,
@@ -72,8 +72,22 @@ class SendPulseTransport extends AbstractTransport
         ];
 
         foreach ($message->getAttachments() as $attachment) {
-            $emailData['attachments_binary'][$attachment->getContentId()] = base64_encode($attachment->getBody());
+            $data = $attachment->getPreparedHeaders()->get('Content-Disposition')->toString();
+            if (!preg_match('#filename="(.+?)"#si', $data, $fileNamePreg)) {
+                continue;
+            }
+
+            $filename = $fileNamePreg[1];
+            $originalFilename = $fileNamePreg[1];
+            $ind = 1;
+            while (isset($emailData['attachments_binary'][$filename])) {
+                $ind++;
+                $filename = '(' . $ind . ')' . $originalFilename;
+            }
+
+            $emailData['attachments_binary'][$filename] = base64_encode($attachment->getBody());
         }
+
 
         $result = $this->sendPulseApiClient->smtpSendMail($emailData);
 
