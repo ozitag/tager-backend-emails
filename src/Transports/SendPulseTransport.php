@@ -22,6 +22,16 @@ class SendPulseTransport extends AbstractTransport
         return 'sendpulse';
     }
 
+    private function getFilename($header) {
+        if (preg_match('/Content-Disposition:.*?filename="(.+?)"/', $header, $matches)) {
+            return $matches[1];
+        }
+        if (preg_match('/Content-Disposition:.*?filename=([^; ]+)/', $header, $matches)) {
+            return rawurldecode($matches[1]);
+        }
+        throw new Exception(__FUNCTION__ .": Filename not found");
+    }
+
     protected function doSend(SentMessage $message): void
     {
         $message = MessageConverter::toEmail($message->getOriginalMessage());
@@ -73,12 +83,11 @@ class SendPulseTransport extends AbstractTransport
 
         foreach ($message->getAttachments() as $attachment) {
             $data = $attachment->getPreparedHeaders()->get('Content-Disposition')->toString();
-            if (!preg_match('#(?:file)*name=(?:\")*(.+?)([\";]|$)#si', $data, $fileNamePreg)) {
-                continue;
-            }
+            $data = trim(preg_replace('/\s+/', '', $data));
+            $data = str_replace('filename*0*=', 'filename=', $data);
+            $data = preg_replace('#;filename\*\d+\*\=#si', '', $data);
 
-            $filename = $fileNamePreg[1];
-            $originalFilename = $fileNamePreg[1];
+            $filename = str_replace("utf-8''", '', $this->getFilename($data));
             $ind = 1;
             while (isset($emailData['attachments_binary'][$filename])) {
                 $ind++;
