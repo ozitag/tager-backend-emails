@@ -91,7 +91,7 @@ class SendPulseTransport extends AbstractTransport
             $ind = 1;
             while (isset($emailData['attachments_binary'][$filename])) {
                 $ind++;
-                $filename = '(' . $ind . ')' . $originalFilename;
+                $filename = '(' . $ind . ')' . $filename;
             }
 
             $emailData['attachments_binary'][$filename] = base64_encode($attachment->getBody());
