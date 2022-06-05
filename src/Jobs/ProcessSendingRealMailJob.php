@@ -13,7 +13,7 @@ use OZiTAG\Tager\Backend\Mail\Utils\TagerMailSender;
 
 class ProcessSendingRealMailJob extends QueueJob
 {
-    /** @var string */
+    /** @var string[] */
     private $to;
 
     /** @var string[] */
@@ -68,14 +68,6 @@ class ProcessSendingRealMailJob extends QueueJob
         dispatch(new SetLogStatusJob($this->logId, $status, $error));
     }
 
-    /**
-     * @return bool
-     */
-    private function isRecipientAllowed(): bool
-    {
-        return $this->isEmailAllowed($this->to);
-    }
-
     private function isEmailAllowed(string $email): bool
     {
         $validEmails = TagerMailConfig::getAllowedEmails();
@@ -125,8 +117,17 @@ class ProcessSendingRealMailJob extends QueueJob
 
     public function handle(TagerMailSender $sender)
     {
-        if ($this->isRecipientAllowed() == false) {
-            $this->setLogStatus(MailStatus::Skip);
+        $toFiltered = [];
+        if ($this->to) {
+            foreach ($this->to as $toValue) {
+                if ($this->isEmailAllowed($toValue)) {
+                    $toFiltered[] = $toValue;
+                }
+            }
+        }
+
+        if (empty($toFiltered)) {
+            $this->setLogStatus(MailStatus::Failure, 'No recipients');
             return;
         }
 
@@ -154,9 +155,9 @@ class ProcessSendingRealMailJob extends QueueJob
             $this->prepareAttachments();
 
             if ($this->serviceTemplate) {
-                $sender->sendUsingServiceTemplate($this->to, $ccFiltered, $bccFiltered, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
+                $sender->sendUsingServiceTemplate($toFiltered, $ccFiltered, $bccFiltered, $this->serviceTemplate, $this->templateFields, $this->subject, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             } else {
-                $sender->send($this->to, $ccFiltered, $bccFiltered, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
+                $sender->send($toFiltered, $ccFiltered, $bccFiltered, $this->subject, $this->body, $this->attachments, $this->fromEmail, $this->fromName, $this->logId);
             }
         } catch (\Throwable $exception) {
             $this->setLogStatus(MailStatus::Failure, $exception->getMessage());

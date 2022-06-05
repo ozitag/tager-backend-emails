@@ -97,10 +97,10 @@ class TagerMailExecutor
             $this->setFrom($template->getFromEmail(), $template->getFromName());
         }
 
-        if($template->getCc()){
+        if ($template->getCc()) {
             $this->setCc($template->getCc());
         }
-        if($template->getBcc()){
+        if ($template->getBcc()) {
             $this->setBcc($template->getBcc());
         }
     }
@@ -194,7 +194,7 @@ class TagerMailExecutor
         return $this->prepareBody($result, $this->templateFields);
     }
 
-    private function createLogItem($recipient, $status = MailStatus::Created)
+    private function createLogItem($status = MailStatus::Created)
     {
         if (TagerMailConfig::hasDatabase() == false) {
             return null;
@@ -215,7 +215,7 @@ class TagerMailExecutor
 
         $this->logRepository->reset();
         return $this->logRepository->fillAndSave([
-            'recipient' => $recipient,
+            'recipient' => implode(', ', $this->getRecipients()),
             'cc' => $this->cc && !empty($this->cc) ? implode(',', $this->cc) : null,
             'bcc' => $this->bcc && !empty($this->bcc) ? implode(',', $this->bcc) : null,
             'subject' => $subject,
@@ -231,17 +231,17 @@ class TagerMailExecutor
         ]);
     }
 
-    private function send($recipient)
+    private function send()
     {
         if (TagerMailConfig::isDisabled()) {
-            $this->createLogItem($recipient, MailStatus::Disabled);
+            $this->createLogItem(MailStatus::Disabled);
             return;
         }
 
-        $log = $this->createLogItem($recipient, MailStatus::Created);
+        $log = $this->createLogItem(MailStatus::Created);
 
         dispatch(new ProcessSendingRealMailJob(
-            $recipient,
+            $this->getRecipients(),
             $this->cc ?? [],
             $this->bcc ?? [],
             $this->getSubject(),
@@ -269,9 +269,6 @@ class TagerMailExecutor
     {
         $this->validate();
 
-        $recipients = $this->getRecipients();
-        foreach ($recipients as $recipient) {
-            $this->send($recipient);
-        }
+        $this->send();
     }
 }
