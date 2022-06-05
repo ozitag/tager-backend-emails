@@ -15,6 +15,7 @@ class SendPulseTransport extends AbstractTransport
     public function __construct(ApiClient $sendPulseApiClient)
     {
         $this->sendPulseApiClient = $sendPulseApiClient;
+        parent::__construct();
     }
 
     public function __toString(): string
