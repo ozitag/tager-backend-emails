@@ -92,13 +92,13 @@ class MandrillService implements ITagerMailService
             'template_content' => $this->getTemplateContent($templateParams),
             'message' => [
                 'to' => array_map(function ($item) {
-                    ['email' => $item];
+                    return ['email' => $item];
                 }, $to),
                 'cc' => $cc ? array_map(function ($item) {
-                    ['email' => $item];
+                    return ['email' => $item];
                 }, $cc) : [],
                 'bcc' => $bcc ? array_map(function ($item) {
-                    ['email' => $item];
+                    return ['email' => $item];
                 }, $bcc) : [],
                 'from_email' => $fromEmail,
                 'from_name' => $fromName,
