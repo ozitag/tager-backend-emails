@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use OZiTAG\Tager\Backend\Mail\Enums\MailScope;
-use OZiTAG\Tager\Backend\Rbac\Facades\AccessControlMiddleware;
 use OZiTAG\Tager\Backend\Mail\Admin\Controllers\AdminMailLogsController;
 use OZiTAG\Tager\Backend\Mail\Admin\Controllers\AdminMailTemplatesController;
 use OZiTAG\Tager\Backend\Mail\Admin\Controllers\AdminMailController;
+use OZiTAG\Tager\Backend\Rbac\Facades\AccessControlMiddleware;
+use Symfony\Component\Routing\Route;
 
 Route::group(['prefix' => 'admin/mail', 'middleware' => ['passport:administrators', 'auth:api']], function () {
     Route::get('/info', [AdminMailController::class, 'info']);

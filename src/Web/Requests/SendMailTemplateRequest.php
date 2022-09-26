@@ -16,7 +16,7 @@ class SendMailTemplateRequest extends FormRequest
     public function rules()
     {
         return [
-            'to' => 'required|string|email',
+            'to' => 'nullable|string|email',
             'template' => 'required|string',
             'params' => 'present|array',
             'params.*.name' => 'required|string',
