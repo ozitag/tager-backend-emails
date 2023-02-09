@@ -2,7 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Mail\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use OZiTAG\Tager\Backend\Core\Repositories\EloquentRepository;
 use OZiTAG\Tager\Backend\Core\Repositories\ISearchable;
 use OZiTAG\Tager\Backend\Mail\Enums\MailStatus;
