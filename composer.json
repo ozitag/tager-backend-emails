@@ -26,5 +26,10 @@
     "psr-4": {
       "OZiTAG\\Tager\\Backend\\Mail\\": "src"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   }
 }

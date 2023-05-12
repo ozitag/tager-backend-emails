@@ -4,6 +4,7 @@ namespace OZiTAG\Tager\Backend\Mail\Utils;
 
 use Illuminate\Mail\Message;
 use Ozerich\FileStorage\Models\File;
+use Ozerich\FileStorage\Services\TempFile;
 
 class TagerMailAttachments
 {
@@ -31,9 +32,9 @@ class TagerMailAttachments
         }
     }
 
-    public function addFile(File $file, $filename = null)
+    public function addFile(File $file, ?string $filename = null): void
     {
-        $this->add($file->getPath(), $filename ? $filename : $file->name, $file->mime, $file->getUrl());
+        $this->add($file->saveContentToTmpFile(), $filename ?: $file->name, $file->mime, $file->getUrl());
     }
 
     /**
