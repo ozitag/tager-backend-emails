@@ -34,7 +34,7 @@ class TagerMailAttachments
 
     public function addFile(File $file, ?string $filename = null): void
     {
-        $this->add($file->saveContentToTmpFile(), $filename ?: $file->name, $file->mime, $file->getUrl());
+        $this->add($file->getLocalPath(), $filename ?: $file->name, $file->mime, $file->getUrl());
     }
 
     /**
