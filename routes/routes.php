@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin/mail', 'middleware' => ['passport:administrators', 'auth:api']], function () {
     Route::get('/info', [AdminMailController::class, 'info']);
+    Route::post('/send-test', [AdminMailController::class, 'sendTest']);
 
     Route::get('/service-templates', [AdminMailController::class, 'serviceTemplates'])->middleware([
         AccessControlMiddleware::scopes(MailScope::EditTemplates)
